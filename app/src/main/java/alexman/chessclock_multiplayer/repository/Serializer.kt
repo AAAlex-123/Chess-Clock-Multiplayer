@@ -1,7 +1,11 @@
 package alexman.chessclock_multiplayer.repository
 
+import alexman.chessclock_multiplayer.model.Profile
 import alexman.chessclock_multiplayer.model.TimeControl
 import alexman.chessclock_multiplayer.model.TimeControlType
+import android.graphics.Color.parseColor
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 
 // TODO: document
 interface Serializer<T, U> {
@@ -34,6 +38,28 @@ val Serializer.Companion.StringTimeControlSerializer
                     it.groupValues[2].toInt(),
                     it.groupValues[3].toInt(),
                     TimeControlType.valueOf(it.groupValues[4]),
+                )
+            }
+    }
+
+// TODO: document
+val Serializer.Companion.StringProfileSerializer
+    get() = object : StringSerializer<Profile> {
+
+        override fun serialize(item: Profile): String =
+            with(item) {
+                val argb = Integer.toHexString(color.toArgb()).uppercase()
+                "$id-$name-#${argb}"
+            }
+
+        private val regex = "(\\d+)-(\\w+)-(#\\w+)"
+
+        override fun deserialize(serializedItem: String): Profile =
+            Regex(regex).matchEntire(serializedItem)!!.let {
+                Profile(
+                    it.groupValues[1].toInt(),
+                    it.groupValues[2],
+                    Color(parseColor(it.groupValues[3])),
                 )
             }
     }
