@@ -1,5 +1,7 @@
 package alexman.chessclock_multiplayer.repository
 
+import alexman.chessclock_multiplayer.model.Clock
+import alexman.chessclock_multiplayer.model.ClockSet
 import alexman.chessclock_multiplayer.model.Profile
 import alexman.chessclock_multiplayer.model.TimeControl
 import alexman.chessclock_multiplayer.model.TimeControlType
@@ -61,5 +63,64 @@ val Serializer.Companion.StringProfileSerializer
                     it.groupValues[2],
                     Color(parseColor(it.groupValues[3])),
                 )
+            }
+    }
+
+// TODO: document
+val Serializer.Companion.StringClockSetSerializer
+    get() = object : StringSerializer<ClockSet> {
+
+        override fun serialize(item: ClockSet): String {
+
+            val clocksString = item.clocks.joinToString(separator=",") {
+                "(${it.profile.id}-${it.timeControl.id}-" +
+                        "${it.timeLeftMillis}-${it.lastSessionTimeMillis})"
+            }
+
+            return with(item) {
+                "$id-$name-$currentClockIndex-[$clocksString]"
+            }
+        }
+
+        private val regex = "(\\d+)-(\\w+)-(\\d+)-\\[(.*)]"
+        private val clockRegex = "\\((\\d+)-(\\d+)-(\\d+)-(\\d+)\\)"
+
+        override fun deserialize(serializedItem: String): ClockSet =
+            Regex(regex).matchEntire(serializedItem)!!.let {
+                val id = it.groupValues[1].toInt()
+                val name = it.groupValues[2]
+                val currentClockIndex = it.groupValues[3].toInt()
+                val clocksString = it.groupValues[4]
+
+                val clocks = clocksString.split(",").map { clockString ->
+                    Regex(clockRegex).matchEntire(clockString)!!.let { it2 ->
+                        val profileId = it2.groupValues[1].toInt()
+                        val timeControlId = it2.groupValues[2].toInt()
+                        val timeLeftMillis = it2.groupValues[3].toInt()
+                        val lastSessionTimeMillis = it2.groupValues[4].toInt()
+
+                        val partialProfile = Profile(
+                            id = profileId,
+                            name = "",
+                            color = Color.Unspecified,
+                        )
+
+                        val partialTimeControl = TimeControl(
+                            id = timeControlId,
+                            timeSeconds = 0,
+                            incrementSeconds = 0,
+                            type = TimeControlType.FISHER,
+                        )
+
+                        Clock.new(
+                            partialProfile,
+                            partialTimeControl,
+                            timeLeftMillis,
+                            lastSessionTimeMillis,
+                        )
+                    }
+                }
+
+                ClockSet(id,name, clocks, currentClockIndex)
             }
     }
