@@ -34,12 +34,12 @@ val Serializer.Companion.StringTimeControlSerializer
         private val regex = Regex("(\\d+)-(\\d+)-(\\d+)-(\\w+)")
 
         override fun deserialize(serializedItem: String): TimeControl =
-            regex.matchEntire(serializedItem)!!.let {
+            regex.matchEntire(serializedItem)!!.let { m ->
                 TimeControl(
-                    it.groupValues[1].toInt(),
-                    it.groupValues[2].toInt(),
-                    it.groupValues[3].toInt(),
-                    TimeControlType.valueOf(it.groupValues[4]),
+                    m.groupValues[1].toInt(),
+                    m.groupValues[2].toInt(),
+                    m.groupValues[3].toInt(),
+                    TimeControlType.valueOf(m.groupValues[4]),
                 )
             }
     }
@@ -57,11 +57,11 @@ val Serializer.Companion.StringProfileSerializer
         private val regex = Regex("(\\d+)-(\\w+)-(#\\w+)")
 
         override fun deserialize(serializedItem: String): Profile =
-            regex.matchEntire(serializedItem)!!.let {
+            regex.matchEntire(serializedItem)!!.let { m ->
                 Profile(
-                    it.groupValues[1].toInt(),
-                    it.groupValues[2],
-                    Color(parseColor(it.groupValues[3])),
+                    m.groupValues[1].toInt(),
+                    m.groupValues[2],
+                    Color(parseColor(m.groupValues[3])),
                 )
             }
     }
@@ -86,18 +86,18 @@ val Serializer.Companion.StringClockSetSerializer
         private val clockRegex = Regex("\\((\\d+)-(\\d+)-(\\d+)-(\\d+)\\)")
 
         override fun deserialize(serializedItem: String): ClockSet =
-            regex.matchEntire(serializedItem)!!.let {
-                val id = it.groupValues[1].toInt()
-                val name = it.groupValues[2]
-                val currentClockIndex = it.groupValues[3].toInt()
-                val clocksString = it.groupValues[4]
+            regex.matchEntire(serializedItem)!!.let { m ->
+                val id = m.groupValues[1].toInt()
+                val name = m.groupValues[2]
+                val currentClockIndex = m.groupValues[3].toInt()
+                val clocksString = m.groupValues[4]
 
                 val clocks = clocksString.split(",").map { clockString ->
-                    clockRegex.matchEntire(clockString)!!.let { it2 ->
-                        val profileId = it2.groupValues[1].toInt()
-                        val timeControlId = it2.groupValues[2].toInt()
-                        val timeLeftMillis = it2.groupValues[3].toInt()
-                        val lastSessionTimeMillis = it2.groupValues[4].toInt()
+                    clockRegex.matchEntire(clockString)!!.let { m2 ->
+                        val profileId = m2.groupValues[1].toInt()
+                        val timeControlId = m2.groupValues[2].toInt()
+                        val timeLeftMillis = m2.groupValues[3].toInt()
+                        val lastSessionTimeMillis = m2.groupValues[4].toInt()
 
                         val partialProfile = Profile(
                             id = profileId,
