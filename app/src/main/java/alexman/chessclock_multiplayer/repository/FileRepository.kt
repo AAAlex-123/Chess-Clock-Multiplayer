@@ -34,6 +34,7 @@ class FileRepository<T : Identifiable>(
             .close()
 
         val newItemList = fileContents.split(SEPARATOR)
+            .filter(String::isNotEmpty)
             .map(serializer::deserialize)
 
         deleteAllItems()
