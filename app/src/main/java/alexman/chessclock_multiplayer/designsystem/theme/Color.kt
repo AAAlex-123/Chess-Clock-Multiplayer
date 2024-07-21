@@ -1,4 +1,4 @@
-package alexman.chessclock_multiplayer.ui.theme
+package alexman.chessclock_multiplayer.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
