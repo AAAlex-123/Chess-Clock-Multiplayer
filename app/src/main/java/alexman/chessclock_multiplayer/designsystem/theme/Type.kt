@@ -37,4 +37,12 @@ private val baseTextStyle = TextStyle(
 )
 
 internal val ChckmTypography = Typography (
+    // buttons
+    bodyLarge = baseTextStyle.copy(
+        fontSize = 32.sp,
+    ),
+    // rest of text
+    bodyMedium = baseTextStyle.copy(
+        fontSize = 24.sp,
+    ),
 )
