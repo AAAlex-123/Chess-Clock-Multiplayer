@@ -1,33 +1,26 @@
 package alexman.chessclock_multiplayer.model
 
 // TODO: document
-data class Clock(
+data class Clock private constructor( // use new() and load() instead of constructor
     val profile: Profile,
-    var timeControl: TimeControl,
-    var timeLeftMillis: Int = timeControl.timeSeconds * 1000,
-    var lastSessionTimeMillis: Int = timeLeftMillis,
+    val timeControl: TimeControl,
+    val timeLeftMillis: Int = timeControl.timeSeconds * 1000,
+    val lastSessionTimeMillis: Int = timeLeftMillis,
 ) {
     companion object {
-        fun new(
+        fun new(profile: Profile, timeControl: TimeControl): Clock =
+            Clock(
+                profile,
+                timeControl,
+                timeLeftMillis = timeControl.timeSeconds * 1000,
+                lastSessionTimeMillis = timeControl.timeSeconds * 1000,
+            )
+
+        fun load(
             profile: Profile,
             timeControl: TimeControl,
             timeLeftMillis: Int,
             lastSessionTimeMillis: Int
-        ): Clock = Clock(
-            profile = profile,
-            timeControl = timeControl,
-            timeLeftMillis = timeLeftMillis,
-            lastSessionTimeMillis = lastSessionTimeMillis,
-        )
-
-        fun new(
-            profile: Profile,
-            timeControl: TimeControl,
-        ): Clock = Clock(
-            profile = profile,
-            timeControl = timeControl,
-            timeLeftMillis = timeControl.timeSeconds * 1000,
-            lastSessionTimeMillis = timeControl.timeSeconds * 1000,
-        )
+        ): Clock = Clock(profile, timeControl, timeLeftMillis, lastSessionTimeMillis)
     }
 }

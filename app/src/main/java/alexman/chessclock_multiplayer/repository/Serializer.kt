@@ -35,7 +35,7 @@ val Serializer.Companion.StringTimeControlSerializer
 
         override fun deserialize(serializedItem: String): TimeControl =
             regex.matchEntire(serializedItem)!!.let { m ->
-                TimeControl(
+                TimeControl.load(
                     m.groupValues[1].toInt(),
                     m.groupValues[2].toInt(),
                     m.groupValues[3].toInt(),
@@ -58,7 +58,7 @@ val Serializer.Companion.StringProfileSerializer
 
         override fun deserialize(serializedItem: String): Profile =
             regex.matchEntire(serializedItem)!!.let { m ->
-                Profile(
+                Profile.load(
                     m.groupValues[1].toInt(),
                     m.groupValues[2],
                     Color(parseColor(m.groupValues[3])),
@@ -99,20 +99,20 @@ val Serializer.Companion.StringClockSetSerializer
                         val timeLeftMillis = m2.groupValues[3].toInt()
                         val lastSessionTimeMillis = m2.groupValues[4].toInt()
 
-                        val partialProfile = Profile(
+                        val partialProfile = Profile.load(
                             id = profileId,
                             name = "",
                             color = Color.Unspecified,
                         )
 
-                        val partialTimeControl = TimeControl(
+                        val partialTimeControl = TimeControl.load(
                             id = timeControlId,
                             timeSeconds = 0,
                             incrementSeconds = 0,
                             type = TimeControlType.FISHER,
                         )
 
-                        Clock.new(
+                        Clock.load(
                             partialProfile,
                             partialTimeControl,
                             timeLeftMillis,
@@ -121,6 +121,6 @@ val Serializer.Companion.StringClockSetSerializer
                     }
                 }
 
-                ClockSet(id,name, clocks, currentClockIndex)
+                ClockSet.load(id,name, clocks, currentClockIndex)
             }
     }
