@@ -19,6 +19,8 @@ data class Profile private constructor( // use new() and load() instead of const
     companion object {
         const val ID_NOT_SET = -1
 
+        val EMPTY: Profile = Profile(ID_NOT_SET, "", Color.White)
+
         // use this instead of constructor, it sets id automatically
         fun new(name: String, color: Color) =
             Profile(id = ID_NOT_SET, name, color)

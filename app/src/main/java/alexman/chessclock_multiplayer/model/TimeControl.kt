@@ -30,6 +30,8 @@ data class TimeControl private constructor( // use new() and load() instead of c
     companion object {
         private const val ID_NOT_SET = -1
 
+        val EMPTY = TimeControl(ID_NOT_SET, 0, 0, TimeControlType.FISHER)
+
         // use this instead of constructor, it sets id automatically
         fun new(timeSeconds: Int, incrementSeconds: Int, type: TimeControlType) =
             TimeControl(ID_NOT_SET, timeSeconds, incrementSeconds, type)

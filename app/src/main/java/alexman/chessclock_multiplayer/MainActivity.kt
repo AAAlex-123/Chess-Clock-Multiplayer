@@ -14,9 +14,11 @@ import alexman.chessclock_multiplayer.model.ClockSet
 import alexman.chessclock_multiplayer.model.Profile
 import alexman.chessclock_multiplayer.model.TimeControl
 import alexman.chessclock_multiplayer.model.TimeControlType
+import alexman.chessclock_multiplayer.ui.DataType
 import alexman.chessclock_multiplayer.ui.EditClockSetScreen
 import alexman.chessclock_multiplayer.ui.EditProfileScreen
 import alexman.chessclock_multiplayer.ui.EditTimeControlScreen
+import alexman.chessclock_multiplayer.ui.ListDataScreen
 import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
@@ -33,13 +35,13 @@ class MainActivity : ComponentActivity() {
 
 private enum class Screen {
     EDIT_TIMECONTROL, EDIT_PROFILE, EDIT_CLOCKSET,
-    NONE,
+    LIST, NONE,
 }
 
 @Composable
 private fun TestScreen() {
 
-    val screen = Screen.EDIT_CLOCKSET
+    val screen = Screen.LIST
 
     val timeControlTestData = listOf(
         TimeControl.load(0, 180, 1, TimeControlType.FISHER),
@@ -74,6 +76,11 @@ private fun TestScreen() {
             Screen.EDIT_CLOCKSET -> EditClockSetScreen(
                 clockSet = clockSetTestData[0],
                 onSubmitClockSet = { println("ClockSet data: $it") },
+            )
+            Screen.LIST -> ListDataScreen(
+                data = timeControlTestData,
+                dataType = DataType.TIME_CONTROL,
+                onSelect = { println("Selected: $it") }
             )
         }
     }
