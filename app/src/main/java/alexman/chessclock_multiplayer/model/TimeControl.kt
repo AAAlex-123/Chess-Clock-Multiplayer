@@ -1,6 +1,7 @@
 package alexman.chessclock_multiplayer.model
 
 import alexman.chessclock_multiplayer.repository.Identifiable
+import alexman.chessclock_multiplayer.ui.Displayable
 
 // TODO: document
 enum class TimeControlType {
@@ -16,9 +17,15 @@ data class TimeControl private constructor( // use new() and load() instead of c
     val timeSeconds: Int,
     val incrementSeconds: Int,
     val type: TimeControlType,
-) : Identifiable {
+) : Identifiable, Displayable {
 
     override val id_not_set_constant: Int = ID_NOT_SET
+
+    override val displayString: String =
+        if (incrementSeconds != 0)
+            "${Parser.format(timeSeconds)} | ${Parser.format(incrementSeconds)}"
+        else
+            Parser.format(timeSeconds)
 
     companion object {
         private const val ID_NOT_SET = -1

@@ -1,6 +1,7 @@
 package alexman.chessclock_multiplayer.model
 
 import alexman.chessclock_multiplayer.repository.Identifiable
+import alexman.chessclock_multiplayer.ui.Displayable
 import androidx.compose.ui.graphics.Color
 
 // TODO: document
@@ -9,9 +10,11 @@ data class Profile private constructor( // use new() and load() instead of const
     override var id: Int = ID_NOT_SET,
     val name: String,
     val color: Color,
-) : Identifiable {
+) : Identifiable, Displayable {
 
     override val id_not_set_constant: Int = ID_NOT_SET
+
+    override val displayString: String = name
 
     companion object {
         const val ID_NOT_SET = -1

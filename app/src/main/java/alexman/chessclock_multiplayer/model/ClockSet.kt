@@ -1,6 +1,7 @@
 package alexman.chessclock_multiplayer.model
 
 import alexman.chessclock_multiplayer.repository.Identifiable
+import alexman.chessclock_multiplayer.ui.Displayable
 
 // TODO: document
 data class ClockSet private constructor( // use new() and load() instead of constructor
@@ -9,9 +10,11 @@ data class ClockSet private constructor( // use new() and load() instead of cons
     val name: String,
     val clocks: List<Clock>,
     val currentClockIndex: Int,
-) : Identifiable {
+) : Identifiable, Displayable {
 
     override val id_not_set_constant: Int = ID_NOT_SET
+
+    override val displayString: String = name
 
     companion object {
         private const val ID_NOT_SET = -1
