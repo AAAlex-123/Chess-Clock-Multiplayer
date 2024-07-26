@@ -74,12 +74,14 @@ private fun TestScreen() {
                 onSubmitProfile = { println("Profile data: $it") },
             )
             Screen.EDIT_CLOCKSET -> EditClockSetScreen(
+                profileData = profileTestData,
+                timeControlData = timeControlTestData,
                 clockSet = clockSetTestData[0],
                 onSubmitClockSet = { println("ClockSet data: $it") },
             )
             Screen.LIST -> ListDataScreen(
-                data = timeControlTestData,
-                dataType = DataType.TIME_CONTROL,
+                data = clockSetTestData,
+                dataType = DataType.CLOCK_SET,
                 onSelect = { println("Selected: $it") }
             )
         }

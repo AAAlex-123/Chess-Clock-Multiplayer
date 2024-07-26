@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -97,37 +98,30 @@ private fun <T : Displayable> ListDataScreenContent(
     var screen by remember { mutableStateOf(ListDataScreen.MAIN) }
     var editItem: T? by remember { mutableStateOf(null) }
 
-    fun getScreenByDataType(dataType: DataType) =
-        when (dataType) {
+    fun onEdit(item: T) {
+        editItem = item
+        screen = when (dataType) {
             DataType.PROFILE -> ListDataScreen.EDIT_PROFILE
             DataType.TIME_CONTROL -> ListDataScreen.EDIT_TIME_CONTROL
             DataType.CLOCK_SET -> ListDataScreen.EDIT_CLOCK_SET
         }
+    }
 
-    fun onEdit(item: T) {
-        editItem = item
-        screen = getScreenByDataType(dataType)
+    fun onCreate() {
+        val newItem = when (dataType) {
+            DataType.PROFILE -> Profile.EMPTY as T
+            DataType.TIME_CONTROL -> TimeControl.EMPTY as T
+            DataType.CLOCK_SET -> ClockSet.EMPTY as T
+        }
+
+        onEdit(newItem)
     }
 
     when (screen) {
         ListDataScreen.MAIN -> ListDataScreenContentMain(
             data = data,
-            dataType = dataType,
             onSelect = onSelect,
-            onCreate = {
-                val newEmptyItem = when (dataType) {
-                    // cast as T is not unchecked because of DataType
-                    DataType.PROFILE -> Profile.EMPTY as T
-                    DataType.TIME_CONTROL -> TimeControl.EMPTY as T
-
-                    // create() can't be called from clock set list screen,
-                    // create button does not appear in clock set list screen
-                    DataType.CLOCK_SET -> null
-                        // screen also doesn't change
-                }
-                // can't be null, can't create from clock set list screen
-                onEdit(newEmptyItem!!)
-            },
+            onCreate = ::onCreate,
             onEdit = ::onEdit,
             onDelete = onDelete,
         )
@@ -148,6 +142,18 @@ private fun <T : Displayable> ListDataScreenContent(
             }
         )
         ListDataScreen.EDIT_CLOCK_SET -> EditClockSetScreen(
+            // make sure these match test data of TestScreen
+            // TODO: replace these with EditClockSet viewModel data
+            profileData = listOf(
+                Profile.load(0, "Alice", Color.Red),
+                Profile.load(1, "Bob", Color.Green)
+            ),
+            // make sure these match test data of TestScreen
+            // TODO: replace these with EditClockSet viewModel data
+            timeControlData = listOf(
+                TimeControl.load(0, 180, 1, TimeControlType.FISHER),
+                TimeControl.load(1, 60, 0, TimeControlType.BRONSTEIN),
+            ),
             clockSet = (editItem as ClockSet),
             onSubmitClockSet = { updatedClockSet ->
                 // cast as T is not unchecked because of DataType
@@ -161,7 +167,6 @@ private fun <T : Displayable> ListDataScreenContent(
 @Composable
 private fun <T : Displayable> ListDataScreenContentMain(
     data: List<T>,
-    dataType: DataType,
     onSelect: (T) -> Unit,
     onCreate: () -> Unit,
     onEdit: (T) -> Unit,
@@ -184,11 +189,10 @@ private fun <T : Displayable> ListDataScreenContentMain(
                 )
             }
         }
-        if ((dataType == DataType.PROFILE) || (dataType == DataType.TIME_CONTROL))
-            ChckmButton(
-                text = "Create New",
-                onClick = onCreate,
-            )
+        ChckmButton(
+            text = "Create New",
+            onClick = onCreate,
+        )
     }
 }
 

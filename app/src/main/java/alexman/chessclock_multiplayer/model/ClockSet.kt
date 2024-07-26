@@ -19,6 +19,8 @@ data class ClockSet private constructor( // use new() and load() instead of cons
     companion object {
         private const val ID_NOT_SET = -1
 
+        val EMPTY: ClockSet = ClockSet(ID_NOT_SET, "", listOf(), 0)
+
         // use this instead of constructor, it sets id automatically
         fun new(name: String, clocks: List<Clock>) =
             ClockSet(id = ID_NOT_SET, name, clocks, currentClockIndex = 0)
