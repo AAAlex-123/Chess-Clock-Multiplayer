@@ -60,6 +60,10 @@ private fun EditClockSetScreenPreview() {
             timeControlData = listOf(),
             clockSet = clockSet,
             onSubmitClockSet = { _ -> },
+            onSubmitProfile = { _ -> },
+            onDeleteProfile = { _ -> },
+            onSubmitTimeControl = { _ -> },
+            onDeleteTimeControl = { _ -> },
         )
     }
 }
@@ -81,6 +85,10 @@ fun EditClockSetScreen(
     timeControlData: List<TimeControl>,
     clockSet: ClockSet,
     onSubmitClockSet: (ClockSet) -> Unit,
+    onSubmitProfile: (Profile) -> Unit,
+    onDeleteProfile: (Profile) -> Unit,
+    onSubmitTimeControl: (TimeControl) -> Unit,
+    onDeleteTimeControl: (TimeControl) -> Unit,
 ) {
 
     fun onSubmit(name: String, clockDataList: List<ClockData>) {
@@ -116,6 +124,10 @@ fun EditClockSetScreen(
         },
         onSubmit = ::onSubmit,
         validateName = ::validateName,
+        onSubmitProfile = onSubmitProfile,
+        onDeleteProfile = onDeleteProfile,
+        onSubmitTimeControl = onSubmitTimeControl,
+        onDeleteTimeControl = onDeleteTimeControl,
     )
 }
 
@@ -131,6 +143,10 @@ private fun EditClockSetScreenContent(
     initialClockDataList: List<ClockData>,
     onSubmit: (String, List<ClockData>) -> Unit,
     validateName: (String) -> Boolean,
+    onSubmitProfile: (Profile) -> Unit,
+    onDeleteProfile: (Profile) -> Unit,
+    onSubmitTimeControl: (TimeControl) -> Unit,
+    onDeleteTimeControl: (TimeControl) -> Unit,
 ) {
     var screen by remember { mutableStateOf(CreateClockSetScreen.MAIN) }
     // keeps track of the item between screens
@@ -192,6 +208,8 @@ private fun EditClockSetScreenContent(
                 }
                 screen = CreateClockSetScreen.MAIN
             },
+            onSubmit = onSubmitProfile,
+            onDelete = onDeleteProfile,
         )
         CreateClockSetScreen.SELECT_TIME_CONTROL -> ListScreen(
             data = timeControlData,
@@ -203,6 +221,8 @@ private fun EditClockSetScreenContent(
                 }
                 screen = CreateClockSetScreen.MAIN
             },
+            onSubmit = onSubmitTimeControl,
+            onDelete = onDeleteTimeControl,
         )
     }
 }
