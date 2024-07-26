@@ -182,9 +182,9 @@ private fun EditClockSetScreenContent(
                 }
             },
         )
-        CreateClockSetScreen.SELECT_PROFILE -> ListDataScreen(
+        CreateClockSetScreen.SELECT_PROFILE -> ListScreen(
             data = profileData,
-            dataType = DataType.PROFILE,
+            listType = ListType.PROFILE,
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
                     profileId = item.id
@@ -193,9 +193,9 @@ private fun EditClockSetScreenContent(
                 screen = CreateClockSetScreen.MAIN
             },
         )
-        CreateClockSetScreen.SELECT_TIME_CONTROL -> ListDataScreen(
+        CreateClockSetScreen.SELECT_TIME_CONTROL -> ListScreen(
             data = timeControlData,
-            dataType = DataType.TIME_CONTROL,
+            listType = ListType.TIME_CONTROL,
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
                     timeControlId = item.id

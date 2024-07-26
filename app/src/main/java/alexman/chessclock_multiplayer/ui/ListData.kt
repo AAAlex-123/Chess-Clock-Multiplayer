@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
-private fun ListDataScreenPreview() {
+private fun ListScreenPreview() {
     ChckmTheme {
-        ListDataScreen(
+        ListScreen(
             data = listOf(
                 TimeControl.new(180, 1, TimeControlType.FISHER),
                 TimeControl.new(60, 0, TimeControlType.BRONSTEIN),
@@ -44,101 +44,66 @@ private fun ListDataScreenPreview() {
     }
 }
 
-@Composable
-fun <T : Displayable> ListDataScreen(
-    data: List<T>, // TODO: use viewModel instead
-    dataType: DataType,
-    onSelect: (T) -> Unit,
-) {
-    fun onSubmit(item: T) {
-        // TODO: store to viewModel
-        when (dataType) {
-            DataType.PROFILE -> {
-                println("Storing profile: ${(item as Profile)}")
-            }
-            DataType.TIME_CONTROL -> {
-                println("Storing time control: ${(item as TimeControl)}")
-            }
-            DataType.CLOCK_SET -> {
-                println("Storing clock set: ${(item as ClockSet)}")
-            }
-        }
-    }
-
-    fun onDelete(item: T) {
-        println("Deleting item: $item")
-        // TODO: delete from viewModel
-    }
-
-    ListDataScreenContent(
-        data = data,
-        dataType = dataType,
-        onSelect = onSelect,
-        onSubmit = ::onSubmit,
-        onDelete = ::onDelete,
-    )
-}
-
-enum class DataType {
+enum class ListType {
     PROFILE, TIME_CONTROL, CLOCK_SET,
 }
 
-private enum class ListDataScreen {
+private enum class ListScreenEnum {
     MAIN, EDIT_PROFILE, EDIT_TIME_CONTROL, EDIT_CLOCK_SET,
 }
 
 @Composable
-private fun <T : Displayable> ListDataScreenContent(
+fun <T : Displayable> ListScreen(
     data: List<T>,
-    dataType: DataType,
+    listType: ListType,
     onSelect: (T) -> Unit,
     onSubmit: (T) -> Unit,
     onDelete: (T) -> Unit,
 ) {
-    var screen by remember { mutableStateOf(ListDataScreen.MAIN) }
+    var screen by remember { mutableStateOf(ListScreenEnum.MAIN) }
     var editItem: T? by remember { mutableStateOf(null) }
 
     fun onEdit(item: T) {
         editItem = item
-        screen = when (dataType) {
-            DataType.PROFILE -> ListDataScreen.EDIT_PROFILE
-            DataType.TIME_CONTROL -> ListDataScreen.EDIT_TIME_CONTROL
-            DataType.CLOCK_SET -> ListDataScreen.EDIT_CLOCK_SET
+        screen = when (listType) {
+            ListType.PROFILE -> ListScreenEnum.EDIT_PROFILE
+            ListType.TIME_CONTROL -> ListScreenEnum.EDIT_TIME_CONTROL
+            ListType.CLOCK_SET -> ListScreenEnum.EDIT_CLOCK_SET
         }
     }
 
     fun onCreate() {
-        val newItem = when (dataType) {
-            DataType.PROFILE -> Profile.EMPTY as T
-            DataType.TIME_CONTROL -> TimeControl.EMPTY as T
-            DataType.CLOCK_SET -> ClockSet.EMPTY as T
+        val newItem = when (listType) {
+            ListType.PROFILE -> Profile.EMPTY as T
+            ListType.TIME_CONTROL -> TimeControl.EMPTY as T
+            ListType.CLOCK_SET -> ClockSet.EMPTY as T
         }
 
         onEdit(newItem)
     }
 
     when (screen) {
-        ListDataScreen.MAIN -> ListDataScreenContentMain(
+        ListScreenEnum.MAIN -> ListScreenContent(
             data = data,
             onSelect = onSelect,
             onCreate = ::onCreate,
             onEdit = ::onEdit,
             onDelete = onDelete,
         )
-        ListDataScreen.EDIT_PROFILE -> EditProfileScreen(
+        ListScreenEnum.EDIT_PROFILE -> EditProfileScreen(
             profile = (editItem as Profile),
             onSubmitProfile = { updatedProfile ->
                 // cast as T is not unchecked because of DataType
                 onSubmit(updatedProfile as T)
-                screen = ListDataScreen.MAIN
+                screen = ListScreenEnum.MAIN
             },
         )
-        ListDataScreen.EDIT_TIME_CONTROL -> EditTimeControlScreen(
+        ListScreenEnum.EDIT_TIME_CONTROL -> EditTimeControlScreen(
             timeControl = (editItem as TimeControl),
             onSubmitTimeControl = { updatedTimeControl ->
                 // cast as T is not unchecked because of DataType
                 onSubmit(updatedTimeControl as T)
-                screen = ListDataScreen.MAIN
+                screen = ListScreenEnum.MAIN
             }
         )
         ListDataScreen.EDIT_CLOCK_SET -> EditClockSetScreen(
@@ -158,14 +123,14 @@ private fun <T : Displayable> ListDataScreenContent(
             onSubmitClockSet = { updatedClockSet ->
                 // cast as T is not unchecked because of DataType
                 onSubmit(updatedClockSet as T)
-                screen = ListDataScreen.MAIN
+                screen = ListScreenEnum.MAIN
             }
         )
     }
 }
 
 @Composable
-private fun <T : Displayable> ListDataScreenContentMain(
+private fun <T : Displayable> ListScreenContent(
     data: List<T>,
     onSelect: (T) -> Unit,
     onCreate: () -> Unit,
@@ -181,7 +146,7 @@ private fun <T : Displayable> ListDataScreenContentMain(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             items(data) {
-                ListDataItem(
+                ListItem(
                     dataItem = it,
                     onSelect = { onSelect(it) },
                     onEdit = { onEdit(it) },
@@ -197,7 +162,7 @@ private fun <T : Displayable> ListDataScreenContentMain(
 }
 
 @Composable
-private fun <T : Displayable> ListDataItem(
+private fun <T : Displayable> ListItem(
     dataItem: T,
     onSelect: () -> Unit,
     onEdit: () -> Unit,
