@@ -26,6 +26,10 @@ import alexman.chessclock_multiplayer.ui.EditProfileScreen
 import alexman.chessclock_multiplayer.ui.EditTimeControlScreen
 import alexman.chessclock_multiplayer.ui.ListClockSetScreen
 import alexman.chessclock_multiplayer.ui.ListScreen
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
@@ -99,37 +103,49 @@ private fun TestScreen() {
     )
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        when (screen) {
-            Screen.NONE -> { }
-            Screen.EDIT_TIMECONTROL -> EditTimeControlScreen(
-                timeControl = timeControlTestData[0],
-                onSubmitTimeControl = { println("TimeControl data: $it") }
-            )
-            Screen.EDIT_PROFILE -> EditProfileScreen(
-                profile = profileTestData[0],
-                onSubmitProfile = { println("Profile data: $it") },
-            )
-            Screen.EDIT_CLOCKSET -> EditClockSetScreen(
-                profileData = profileTestData,
-                timeControlData = timeControlTestData,
-                clockSet = clockSetTestData[0],
-                onSubmitClockSet = { println("ClockSet data: $it") },
-                onSubmitProfile = { _ -> },
-                onDeleteProfile = { _ -> },
-                onSubmitTimeControl = { _ -> },
-                onDeleteTimeControl = { _ -> },
-            )
-            Screen.LIST -> ListScreen(
-                data = timeControlTestData,
-                listType = ListType.TIME_CONTROL,
-                onSelect = { println("Selected: $it") },
-                onSubmit = { println("Submit: $it") },
-                onDelete = { println("Delete: $it") }
-            )
-            Screen.LIST_CLOCKEST -> ListClockSetScreen(
-                viewModel = viewModel,
-                onSelect = { println("Select: $it") },
-            )
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            when (screen) {
+                Screen.NONE -> {}
+
+                Screen.EDIT_TIMECONTROL -> EditTimeControlScreen(
+                    timeControl = timeControlTestData[0],
+                    onSubmitTimeControl = { println("TimeControl data: $it") }
+                )
+
+                Screen.EDIT_PROFILE -> EditProfileScreen(
+                    profile = profileTestData[0],
+                    onSubmitProfile = { println("Profile data: $it") },
+                )
+
+                Screen.EDIT_CLOCKSET -> EditClockSetScreen(
+                    profileData = profileTestData,
+                    timeControlData = timeControlTestData,
+                    clockSet = clockSetTestData[0],
+                    onSubmitClockSet = { println("ClockSet data: $it") },
+                    onSubmitProfile = { _ -> },
+                    onDeleteProfile = { _ -> },
+                    onSubmitTimeControl = { _ -> },
+                    onDeleteTimeControl = { _ -> },
+                )
+
+                Screen.LIST -> ListScreen(
+                    data = timeControlTestData,
+                    listType = ListType.TIME_CONTROL,
+                    onSelect = { println("Selected: $it") },
+                    onSubmit = { println("Submit: $it") },
+                    onDelete = { println("Delete: $it") }
+                )
+
+                Screen.LIST_CLOCKEST -> ListClockSetScreen(
+                    viewModel = viewModel,
+                    onSelect = { println("Select: $it") },
+                )
+            }
         }
     }
 }
