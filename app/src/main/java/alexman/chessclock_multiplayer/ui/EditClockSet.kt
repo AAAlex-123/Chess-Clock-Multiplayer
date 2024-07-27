@@ -131,7 +131,7 @@ fun EditClockSetScreen(
     )
 }
 
-private enum class CreateClockSetScreen {
+private enum class EditClockSetScreenEnum {
     MAIN, SELECT_PROFILE, SELECT_TIME_CONTROL,
 }
 
@@ -148,7 +148,7 @@ private fun EditClockSetScreenContent(
     onSubmitTimeControl: (TimeControl) -> Unit,
     onDeleteTimeControl: (TimeControl) -> Unit,
 ) {
-    var screen by remember { mutableStateOf(CreateClockSetScreen.MAIN) }
+    var screen by remember { mutableStateOf(EditClockSetScreenEnum.MAIN) }
     // keeps track of the item between screens
     var editItemIndex by remember { mutableIntStateOf(-1) }
 
@@ -172,14 +172,14 @@ private fun EditClockSetScreenContent(
         }
 
     when (screen) {
-        CreateClockSetScreen.MAIN -> EditClockSetScreenContentMain(
+        EditClockSetScreenEnum.MAIN -> EditClockSetScreenContentMain(
             onEditProfile = { index ->
                 editItemIndex = index
-                screen = CreateClockSetScreen.SELECT_PROFILE
+                screen = EditClockSetScreenEnum.SELECT_PROFILE
             },
             onEditTimeControl = { index ->
                 editItemIndex = index
-                screen = CreateClockSetScreen.SELECT_TIME_CONTROL
+                screen = EditClockSetScreenEnum.SELECT_TIME_CONTROL
             },
             name = name,
             nameIsError = nameIsError,
@@ -198,7 +198,7 @@ private fun EditClockSetScreenContent(
                 }
             },
         )
-        CreateClockSetScreen.SELECT_PROFILE -> ListScreen(
+        EditClockSetScreenEnum.SELECT_PROFILE -> ListScreen(
             data = profileData,
             listType = ListType.PROFILE,
             onSelect = { item ->
@@ -206,12 +206,12 @@ private fun EditClockSetScreenContent(
                     profileId = item.id
                     profileDisplayString = item.displayString
                 }
-                screen = CreateClockSetScreen.MAIN
+                screen = EditClockSetScreenEnum.MAIN
             },
             onSubmit = onSubmitProfile,
             onDelete = onDeleteProfile,
         )
-        CreateClockSetScreen.SELECT_TIME_CONTROL -> ListScreen(
+        EditClockSetScreenEnum.SELECT_TIME_CONTROL -> ListScreen(
             data = timeControlData,
             listType = ListType.TIME_CONTROL,
             onSelect = { item ->
@@ -219,7 +219,7 @@ private fun EditClockSetScreenContent(
                     timeControlId = item.id
                     timeControlDisplayString = item.displayString
                 }
-                screen = CreateClockSetScreen.MAIN
+                screen = EditClockSetScreenEnum.MAIN
             },
             onSubmit = onSubmitTimeControl,
             onDelete = onDeleteTimeControl,
