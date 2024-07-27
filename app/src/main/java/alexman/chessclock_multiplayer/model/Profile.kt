@@ -17,7 +17,7 @@ data class Profile private constructor( // use new() and load() instead of const
     override val displayString: String = name
 
     companion object {
-        const val ID_NOT_SET = -1
+        private const val ID_NOT_SET = -1
 
         val EMPTY: Profile = Profile(ID_NOT_SET, "", Color.White)
 
