@@ -279,7 +279,7 @@ private fun EditClockSetScreenContentMain(
                 onClick = onAddClock,
             )
             ChckmButton(
-                text = "Create",
+                text = "OK",
                 onClick = onCreate,
             )
         }
