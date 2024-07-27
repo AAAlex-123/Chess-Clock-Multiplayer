@@ -8,7 +8,6 @@ import alexman.chessclock_multiplayer.designsystem.component.EditIcon
 import alexman.chessclock_multiplayer.designsystem.theme.ChckmTheme
 import alexman.chessclock_multiplayer.model.Profile
 import alexman.chessclock_multiplayer.model.TimeControl
-import alexman.chessclock_multiplayer.model.TimeControlType
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,13 +30,11 @@ import androidx.compose.ui.unit.dp
 private fun ListScreenPreview() {
     ChckmTheme {
         ListScreen(
-            data = listOf(
-                TimeControl.new(180, 1, TimeControlType.FISHER),
-                TimeControl.new(60, 0, TimeControlType.BRONSTEIN),
-                TimeControl.new(900, 30, TimeControlType.DELAY),
-            ),
-            dataType = DataType.TIME_CONTROL,
-            onSelect = { _ -> }
+            data = listOf(),
+            listType = ListType.TIME_CONTROL,
+            onSelect = { _ -> },
+            onSubmit = { _ -> },
+            onDelete = { _ -> },
         )
     }
 }

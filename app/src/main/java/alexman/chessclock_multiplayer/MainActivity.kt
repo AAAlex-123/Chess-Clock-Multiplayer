@@ -114,11 +114,17 @@ private fun TestScreen() {
                 timeControlData = timeControlTestData,
                 clockSet = clockSetTestData[0],
                 onSubmitClockSet = { println("ClockSet data: $it") },
+                onSubmitProfile = { _ -> },
+                onDeleteProfile = { _ -> },
+                onSubmitTimeControl = { _ -> },
+                onDeleteTimeControl = { _ -> },
             )
             Screen.LIST -> ListScreen(
-                data = clockSetTestData,
-                dataType = DataType.CLOCK_SET,
-                onSelect = { println("Selected: $it") }
+                data = timeControlTestData,
+                listType = ListType.TIME_CONTROL,
+                onSelect = { println("Selected: $it") },
+                onSubmit = { println("Submit: $it") },
+                onDelete = { println("Delete: $it") }
             )
             Screen.LIST_CLOCKEST -> ListClockSetScreen(
                 viewModel = viewModel,
