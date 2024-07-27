@@ -6,7 +6,6 @@ import alexman.chessclock_multiplayer.designsystem.component.ChckmTextM
 import alexman.chessclock_multiplayer.designsystem.component.DeleteIcon
 import alexman.chessclock_multiplayer.designsystem.component.EditIcon
 import alexman.chessclock_multiplayer.designsystem.theme.ChckmTheme
-import alexman.chessclock_multiplayer.model.ClockSet
 import alexman.chessclock_multiplayer.model.Profile
 import alexman.chessclock_multiplayer.model.TimeControl
 import alexman.chessclock_multiplayer.model.TimeControlType
@@ -24,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -45,11 +43,11 @@ private fun ListScreenPreview() {
 }
 
 enum class ListType {
-    PROFILE, TIME_CONTROL, CLOCK_SET,
+    PROFILE, TIME_CONTROL,
 }
 
 private enum class ListScreenEnum {
-    MAIN, EDIT_PROFILE, EDIT_TIME_CONTROL, EDIT_CLOCK_SET,
+    MAIN, EDIT_PROFILE, EDIT_TIME_CONTROL,
 }
 
 @Composable
@@ -68,7 +66,6 @@ fun <T : Displayable> ListScreen(
         screen = when (listType) {
             ListType.PROFILE -> ListScreenEnum.EDIT_PROFILE
             ListType.TIME_CONTROL -> ListScreenEnum.EDIT_TIME_CONTROL
-            ListType.CLOCK_SET -> ListScreenEnum.EDIT_CLOCK_SET
         }
     }
 
@@ -76,7 +73,6 @@ fun <T : Displayable> ListScreen(
         val newItem = when (listType) {
             ListType.PROFILE -> Profile.EMPTY as T
             ListType.TIME_CONTROL -> TimeControl.EMPTY as T
-            ListType.CLOCK_SET -> ClockSet.EMPTY as T
         }
 
         onEdit(newItem)
@@ -106,31 +102,11 @@ fun <T : Displayable> ListScreen(
                 screen = ListScreenEnum.MAIN
             }
         )
-        ListDataScreen.EDIT_CLOCK_SET -> EditClockSetScreen(
-            // make sure these match test data of TestScreen
-            // TODO: replace these with EditClockSet viewModel data
-            profileData = listOf(
-                Profile.load(0, "Alice", Color.Red),
-                Profile.load(1, "Bob", Color.Green)
-            ),
-            // make sure these match test data of TestScreen
-            // TODO: replace these with EditClockSet viewModel data
-            timeControlData = listOf(
-                TimeControl.load(0, 180, 1, TimeControlType.FISHER),
-                TimeControl.load(1, 60, 0, TimeControlType.BRONSTEIN),
-            ),
-            clockSet = (editItem as ClockSet),
-            onSubmitClockSet = { updatedClockSet ->
-                // cast as T is not unchecked because of DataType
-                onSubmit(updatedClockSet as T)
-                screen = ListScreenEnum.MAIN
-            }
-        )
     }
 }
 
 @Composable
-private fun <T : Displayable> ListScreenContent(
+fun <T : Displayable> ListScreenContent(
     data: List<T>,
     onSelect: (T) -> Unit,
     onCreate: () -> Unit,

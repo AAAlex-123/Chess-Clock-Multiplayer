@@ -14,12 +14,20 @@ import alexman.chessclock_multiplayer.model.ClockSet
 import alexman.chessclock_multiplayer.model.Profile
 import alexman.chessclock_multiplayer.model.TimeControl
 import alexman.chessclock_multiplayer.model.TimeControlType
+import alexman.chessclock_multiplayer.repository.FileRepository
+import alexman.chessclock_multiplayer.repository.Serializer
+import alexman.chessclock_multiplayer.repository.StringClockSetSerializer
+import alexman.chessclock_multiplayer.repository.StringProfileSerializer
+import alexman.chessclock_multiplayer.repository.StringTimeControlSerializer
+import alexman.chessclock_multiplayer.ui.ChckmViewModel
 import alexman.chessclock_multiplayer.ui.ListType
 import alexman.chessclock_multiplayer.ui.EditClockSetScreen
 import alexman.chessclock_multiplayer.ui.EditProfileScreen
 import alexman.chessclock_multiplayer.ui.EditTimeControlScreen
+import alexman.chessclock_multiplayer.ui.ListClockSetScreen
 import alexman.chessclock_multiplayer.ui.ListScreen
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +43,41 @@ class MainActivity : ComponentActivity() {
 
 private enum class Screen {
     EDIT_TIMECONTROL, EDIT_PROFILE, EDIT_CLOCKSET,
-    LIST, NONE,
+    LIST, LIST_CLOCKEST, NONE,
 }
 
 @Composable
 private fun TestScreen() {
 
-    val screen = Screen.LIST
+    val screen = Screen.LIST_CLOCKEST
+
+    val timeControlFileName = "timecontrol.txt"
+    val profileFileName = "profile.txt"
+    val clockSetFileName = "clockset.txt"
+
+    val timeControlRepository = FileRepository(
+        context = LocalContext.current,
+        fileName = timeControlFileName,
+        serializer = Serializer.StringTimeControlSerializer,
+    )
+
+    val profileRepository = FileRepository(
+        context = LocalContext.current,
+        fileName = profileFileName,
+        serializer = Serializer.StringProfileSerializer,
+    )
+
+    val clockSetRepository = FileRepository(
+        context = LocalContext.current,
+        fileName = clockSetFileName,
+        serializer = Serializer.StringClockSetSerializer,
+    )
+
+    val viewModel = ChckmViewModel(
+        profileRepository = profileRepository,
+        timeControlRepository = timeControlRepository,
+        clockSetRepository = clockSetRepository,
+    )
 
     val timeControlTestData = listOf(
         TimeControl.load(0, 180, 1, TimeControlType.FISHER),
@@ -83,6 +119,10 @@ private fun TestScreen() {
                 data = clockSetTestData,
                 dataType = DataType.CLOCK_SET,
                 onSelect = { println("Selected: $it") }
+            )
+            Screen.LIST_CLOCKEST -> ListClockSetScreen(
+                viewModel = viewModel,
+                onSelect = { println("Select: $it") },
             )
         }
     }
