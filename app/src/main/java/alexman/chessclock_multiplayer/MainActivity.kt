@@ -85,8 +85,8 @@ private fun TestScreen() {
 
     val timeControlTestData = listOf(
         TimeControl.load(0, 180, 1, TimeControlType.FISHER),
-        TimeControl.load(1, 60, 1, TimeControlType.BRONSTEIN),
-        TimeControl.load(2, 300, 5, TimeControlType.DELAY),
+        TimeControl.load(1, 60, 0, TimeControlType.BRONSTEIN),
+        TimeControl.load(2, 900, 30, TimeControlType.DELAY),
     )
 
     val profileTestData = listOf(
@@ -98,7 +98,6 @@ private fun TestScreen() {
     val clockSetTestData = listOf(
         ClockSet.load(0, "Scrabble", listOf(
             Clock.load(profileTestData[0], timeControlTestData[0], 1000, 5000),
-            Clock.load(profileTestData[1], timeControlTestData[1], 2000, 4000),
         ), 0),
     )
 
