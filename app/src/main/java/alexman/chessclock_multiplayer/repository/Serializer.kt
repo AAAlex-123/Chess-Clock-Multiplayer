@@ -96,8 +96,8 @@ val Serializer.Companion.StringClockSetSerializer
                     clockRegex.matchEntire(clockString)!!.let { m2 ->
                         val profileId = m2.groupValues[1].toInt()
                         val timeControlId = m2.groupValues[2].toInt()
-                        val timeLeftMillis = m2.groupValues[3].toInt()
-                        val lastSessionTimeMillis = m2.groupValues[4].toInt()
+                        val timeLeftMillis = m2.groupValues[3].toLong()
+                        val lastSessionTimeMillis = m2.groupValues[4].toLong()
 
                         val partialProfile = Profile.load(
                             id = profileId,

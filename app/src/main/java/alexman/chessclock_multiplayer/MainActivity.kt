@@ -97,7 +97,7 @@ private fun TestScreen() {
 
     val clockSetTestData = listOf(
         ClockSet.load(0, "Scrabble", listOf(
-            Clock.load(profileTestData[0], timeControlTestData[0], 1000, 5000),
+            Clock.load(profileTestData[0], timeControlTestData[0], 1000L, 5000L),
         ), 0),
     )
 
