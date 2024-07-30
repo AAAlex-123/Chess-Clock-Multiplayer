@@ -212,7 +212,7 @@ fun Icon(
         modifier = modifier
             .height(
                 when (sizeVariation) {
-                    SizeVariation.PRIMARY -> 40.dp
+                    SizeVariation.PRIMARY -> 64.dp
                     SizeVariation.SECONDARY -> 32.dp
                 }
             )
