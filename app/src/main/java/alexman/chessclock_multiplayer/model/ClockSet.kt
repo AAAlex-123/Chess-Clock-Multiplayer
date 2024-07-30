@@ -16,6 +16,37 @@ data class ClockSet private constructor( // use new() and load() instead of cons
 
     override val displayString: String = name
 
+    val currentClock: Clock
+        get() = clocks[currentClockIndex]
+
+    fun nextIndex(skipFlagged: Boolean): ClockSet = this.let {
+        var index = it.currentClockIndex
+        do {
+            index = (index + 1) % it.clocks.size
+        } while (skipFlagged && clocks[index].timeLeftMillis == 0L)
+
+        it.copy(currentClockIndex = index)
+    }
+
+    fun prevIndex(skipFlagged: Boolean): ClockSet = this.let {
+        var index = it.currentClockIndex
+        do {
+            index = (index + it.clocks.size - 1) % it.clocks.size
+        } while (skipFlagged && clocks[index].timeLeftMillis == 0L)
+
+        it.copy(currentClockIndex = index)
+    }
+
+    fun updateCurrentClock(newClock: Clock): ClockSet = this.let {
+        val newClockList = it.clocks.mapIndexed { index, clock ->
+            if (index == it.currentClockIndex)
+                newClock
+            else clock
+        }
+
+        it.copy(clocks = newClockList)
+    }
+
     companion object {
         private const val ID_NOT_SET = -1
 
