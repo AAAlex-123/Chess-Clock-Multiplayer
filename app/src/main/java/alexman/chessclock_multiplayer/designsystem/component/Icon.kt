@@ -71,6 +71,96 @@ fun EditIcon(
 }
 
 @Composable
+fun ResetIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+) {
+    IconClickable(
+        id = R.drawable.ic_restart,
+        alt = "Reset time",
+        onClick = onClick,
+        modifier = modifier,
+        sizeVariation = sizeVariation,
+    )
+}
+
+@Composable
+fun PreviousIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+) {
+    IconClickable(
+        id = R.drawable.ic_arrow_left,
+        alt = "Previous",
+        onClick = onClick,
+        modifier = modifier,
+        sizeVariation = sizeVariation,
+    )
+}
+
+@Composable
+fun NextIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+) {
+    IconClickable(
+        id = R.drawable.ic_arrow_right,
+        alt = "Next",
+        onClick = onClick,
+        modifier = modifier,
+        sizeVariation = sizeVariation,
+    )
+}
+
+@Composable
+fun PauseIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+) {
+    IconClickable(
+        id = R.drawable.ic_pause,
+        alt = "Pause",
+        onClick = onClick,
+        modifier = modifier,
+        sizeVariation = sizeVariation,
+    )
+}
+
+@Composable
+fun ResumeIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+) {
+    IconClickable(
+        id = R.drawable.ic_play,
+        alt = "Resume",
+        onClick = onClick,
+        modifier = modifier,
+        sizeVariation = sizeVariation,
+    )
+}
+
+@Composable
+fun FlagIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+) {
+    IconClickable(
+        id = R.drawable.ic_flag,
+        alt = "Flag",
+        onClick = onClick,
+        modifier = modifier,
+        sizeVariation = sizeVariation,
+    )
+}
+
+@Composable
 fun IconClickable(
     @DrawableRes id: Int,
     alt: String,
