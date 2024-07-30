@@ -319,7 +319,7 @@ private fun EditClockRow(
                 text = clockData.profileDisplayString ?: emptyFieldText,
                 modifier = Modifier
                     .padding(8.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
             )
         }
         ChckmCard(
@@ -332,7 +332,7 @@ private fun EditClockRow(
                 text = clockData.timeControlDisplayString ?: emptyFieldText,
                 modifier = Modifier
                     .padding(8.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
             )
         }
         // don't allow deletion of first `minClocks` clocks
