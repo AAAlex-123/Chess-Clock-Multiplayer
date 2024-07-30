@@ -37,6 +37,10 @@ private val baseTextStyle = TextStyle(
 )
 
 internal val ChckmTypography = Typography (
+    // large player timer
+    displayMedium = baseTextStyle.copy(
+        fontSize = 96.sp,
+    ),
     // buttons
     bodyLarge = baseTextStyle.copy(
         fontSize = 32.sp,

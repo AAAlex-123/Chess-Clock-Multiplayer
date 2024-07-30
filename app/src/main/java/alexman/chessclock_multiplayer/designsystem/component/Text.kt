@@ -24,6 +24,18 @@ private fun ChckmTextPreview() {
 }
 
 @Composable
+fun ChckmTextDM(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = text,
+        style = ChckmTypography.displayMedium,
+        modifier = modifier,
+    )
+}
+
+@Composable
 fun ChckmTextL(
     text: String,
     modifier: Modifier = Modifier,
