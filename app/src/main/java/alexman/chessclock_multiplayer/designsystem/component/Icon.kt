@@ -45,6 +45,7 @@ fun DeleteIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_trashcan,
@@ -52,6 +53,7 @@ fun DeleteIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -60,6 +62,7 @@ fun EditIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_pencil,
@@ -67,6 +70,7 @@ fun EditIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -75,6 +79,7 @@ fun ResetIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_restart,
@@ -82,6 +87,7 @@ fun ResetIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -90,6 +96,7 @@ fun PreviousIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_arrow_left,
@@ -97,6 +104,7 @@ fun PreviousIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -105,6 +113,7 @@ fun NextIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_arrow_right,
@@ -112,6 +121,7 @@ fun NextIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -120,6 +130,7 @@ fun PauseIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_pause,
@@ -127,6 +138,7 @@ fun PauseIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -135,6 +147,7 @@ fun ResumeIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_play,
@@ -142,6 +155,7 @@ fun ResumeIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -150,6 +164,7 @@ fun FlagIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    enabled: Boolean = true,
 ) {
     IconClickable(
         id = R.drawable.ic_flag,
@@ -157,6 +172,7 @@ fun FlagIcon(
         onClick = onClick,
         modifier = modifier,
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -167,13 +183,18 @@ fun IconClickable(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    enabled: Boolean = true,
 ) {
     Icon(
         id = id,
         alt = alt,
         modifier = modifier
-            .clickable(onClick = onClick),
+            .clickable(
+                enabled = enabled,
+                onClick = onClick,
+            ),
         sizeVariation = sizeVariation,
+        enabled = enabled,
     )
 }
 
@@ -183,6 +204,7 @@ fun Icon(
     alt: String,
     modifier: Modifier = Modifier,
     sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    enabled: Boolean = true,
 ) {
     Image(
         painter = painterResource(id = id),
@@ -195,5 +217,6 @@ fun Icon(
                 }
             )
             .wrapContentWidth(),
+        alpha = if (enabled) 1.0f else 0.5f,
     )
 }
