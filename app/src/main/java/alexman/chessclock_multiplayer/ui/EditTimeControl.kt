@@ -1,7 +1,6 @@
 package alexman.chessclock_multiplayer.ui
 
 import alexman.chessclock_multiplayer.designsystem.component.ChckmButton
-import alexman.chessclock_multiplayer.designsystem.component.ChckmRadioButtonGroup
 import alexman.chessclock_multiplayer.designsystem.component.ChckmTextField
 import alexman.chessclock_multiplayer.designsystem.theme.ChckmTheme
 import alexman.chessclock_multiplayer.model.TimeControl
@@ -105,11 +104,6 @@ private fun EditTimeControlScreenContent(
              },
             placeholderText = "1m 15sec",
             isError = incrementIsError,
-        )
-        ChckmRadioButtonGroup(
-            items = TimeControlType.entries,
-            selected = type,
-            onSelectedChanged = { type = it },
         )
         ChckmButton(
             text = "OK",
