@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "alexman.chessclock_multiplayer"
+    namespace = "alexman.chckm"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "alexman.chessclock_multiplayer"
+        applicationId = "alexman.chckm"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
