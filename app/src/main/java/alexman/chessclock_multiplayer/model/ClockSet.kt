@@ -17,7 +17,8 @@ data class ClockSet private constructor( // use new() and load() instead of cons
     override val displayString: String = name
 
     val currentClock: Clock
-        get() = clocks[currentClockIndex]
+        get() = if (clocks.isEmpty()) throw NoSuchElementException()
+                else clocks[currentClockIndex]
 
     fun nextIndex(skipFlagged: Boolean): ClockSet = this.let {
         val initialIndex = it.currentClockIndex
@@ -55,8 +56,10 @@ data class ClockSet private constructor( // use new() and load() instead of cons
 
     fun updateCurrentClock(newClock: Clock): ClockSet = this.let {
         val newClockList = it.clocks.mapIndexed { index, clock ->
+            // replace clock at currentClockIndex with newClock
             if (index == it.currentClockIndex)
                 newClock
+            // keep other clocks the same
             else clock
         }
 
