@@ -36,31 +36,37 @@ class ChckmViewModel(
 
     fun writeProfile(item: Profile) {
         profileRepository.writeItem(item)
+        profileRepository.store()
         refreshProfileState()
     }
 
     fun deleteProfile(item: Profile) {
         profileRepository.deleteItem(item.id)
+        profileRepository.store()
         refreshProfileState()
     }
 
     fun writeTimeControl(item: TimeControl) {
         timeControlRepository.writeItem(item)
+        timeControlRepository.store()
         refreshTimeControlState()
     }
 
     fun deleteTimeControl(item: TimeControl) {
         timeControlRepository.deleteItem(item.id)
+        timeControlRepository.store()
         refreshTimeControlState()
     }
 
     fun writeClockSet(item: ClockSet) {
         clockSetRepository.writeItem(item)
+        clockSetRepository.store()
         refreshClockSetState()
     }
 
     fun deleteClockSet(item: ClockSet) {
         clockSetRepository.deleteItem(item.id)
+        clockSetRepository.store()
         refreshClockSetState()
     }
 
