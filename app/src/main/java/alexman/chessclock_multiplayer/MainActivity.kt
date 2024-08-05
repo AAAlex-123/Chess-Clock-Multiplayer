@@ -20,12 +20,14 @@ import alexman.chessclock_multiplayer.repository.StringClockSetSerializer
 import alexman.chessclock_multiplayer.repository.StringProfileSerializer
 import alexman.chessclock_multiplayer.repository.StringTimeControlSerializer
 import alexman.chessclock_multiplayer.ui.ChckmViewModel
+import alexman.chessclock_multiplayer.ui.CountDownViewModel
 import alexman.chessclock_multiplayer.ui.ListType
 import alexman.chessclock_multiplayer.ui.EditClockSetScreen
 import alexman.chessclock_multiplayer.ui.EditProfileScreen
 import alexman.chessclock_multiplayer.ui.EditTimeControlScreen
 import alexman.chessclock_multiplayer.ui.ListClockSetScreen
 import alexman.chessclock_multiplayer.ui.ListScreen
+import alexman.chessclock_multiplayer.ui.MainScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -48,12 +50,13 @@ class MainActivity : ComponentActivity() {
 private enum class Screen {
     EDIT_TIMECONTROL, EDIT_PROFILE, EDIT_CLOCKSET,
     LIST, LIST_CLOCKEST, NONE,
+    MAIN,
 }
 
 @Composable
 private fun TestScreen() {
 
-    val screen = Screen.LIST_CLOCKEST
+    val screen = Screen.MAIN
 
     val timeControlFileName = "timecontrol.txt"
     val profileFileName = "profile.txt"
@@ -77,29 +80,55 @@ private fun TestScreen() {
         serializer = Serializer.StringClockSetSerializer,
     )
 
-    val viewModel = ChckmViewModel(
-        profileRepository = profileRepository,
-        timeControlRepository = timeControlRepository,
-        clockSetRepository = clockSetRepository,
-    )
-
     val timeControlTestData = listOf(
-        TimeControl.load(0, 180, 1, TimeControlType.FISHER),
-        TimeControl.load(1, 60, 0, TimeControlType.BRONSTEIN),
-        TimeControl.load(2, 900, 30, TimeControlType.DELAY),
+        TimeControl.load(0, 20, 0, TimeControlType.FISHER),
+        TimeControl.load(1, 30, 0, TimeControlType.FISHER),
+        TimeControl.load(2, 200, 0, TimeControlType.FISHER),
     )
 
     val profileTestData = listOf(
         Profile.load(0, "Alice", Color.Red),
         Profile.load(1, "Bob", Color.Green),
         Profile.load(2, "Charlie", Color.Blue),
+        Profile.load(3, "Dan", Color.Yellow),
+        Profile.load(4, "Erin", Color.Cyan),
+        Profile.load(5, "Frank", Color.Magenta),
+        Profile.load(6, "Grace", Color.Magenta),
+        Profile.load(7, "Hector", Color.Magenta),
     )
 
     val clockSetTestData = listOf(
         ClockSet.load(0, "Scrabble", listOf(
-            Clock.load(profileTestData[0], timeControlTestData[0], 1000L, 5000L),
+            Clock.load(profileTestData[0], timeControlTestData[0], 1000, 1500),
+            Clock.load(profileTestData[1], timeControlTestData[1], 15000, 20000),
+            Clock.load(profileTestData[2], timeControlTestData[2], 100000, 150000),
+            Clock.load(profileTestData[3], timeControlTestData[1], 100000, 150000),
+            // Clock.load(profileTestData[4], timeControlTestData[1], 100000, 150000),
+            // Clock.load(profileTestData[5], timeControlTestData[1], 100000, 150000),
+            // Clock.load(profileTestData[6], timeControlTestData[1], 100000, 150000),
+            // Clock.load(profileTestData[7], timeControlTestData[1], 100000, 150000),
+            // Clock.load(profileTestData[0], timeControlTestData[1], 100000, 150000),
+            // Clock.load(profileTestData[1], timeControlTestData[1], 100000, 150000),
+            // Clock.load(profileTestData[2], timeControlTestData[2], 100000, 150000),
+            // Clock.load(profileTestData[3], timeControlTestData[1], 100000, 150000),
         ), 0),
     )
+
+    timeControlRepository.deleteAllItems()
+    profileRepository.deleteAllItems()
+    clockSetRepository.deleteAllItems()
+
+    timeControlRepository.writeAllItems(timeControlTestData)
+    profileRepository.writeAllItems(profileTestData)
+    clockSetRepository.writeAllItems(clockSetTestData)
+
+    val viewModel = ChckmViewModel(
+        profileRepository = profileRepository,
+        timeControlRepository = timeControlRepository,
+        clockSetRepository = clockSetRepository,
+    )
+
+    val countDownViewModel = CountDownViewModel()
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Box(
@@ -143,6 +172,11 @@ private fun TestScreen() {
                 Screen.LIST_CLOCKEST -> ListClockSetScreen(
                     viewModel = viewModel,
                     onSelect = { println("Select: $it") },
+                )
+
+                Screen.MAIN -> MainScreen(
+                    chckmViewModel = viewModel,
+                    countDownViewModel = countDownViewModel,
                 )
             }
         }
