@@ -42,6 +42,7 @@ class FileRepository<T : Identifiable>(
     }
 
     override fun store() {
+
         val fileContents = readAllItems()
             .joinToString(
                 separator = SEPARATOR,

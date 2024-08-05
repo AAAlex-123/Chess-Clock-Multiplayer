@@ -6,13 +6,11 @@ class Cache<T : Identifiable> : Repository<T> {
     private val cache = mutableMapOf<Int, T>()
 
     override fun readItem(id: Int): T {
-        println("Cache: reading item: $id")
         ensureIdExists(id)
         return cache[id]!!
     }
 
     override fun readAllItems(): List<T> {
-        println("Cache: reading all items")
         return cache.values.toList()
     }
 
@@ -32,12 +30,10 @@ class Cache<T : Identifiable> : Repository<T> {
         // maybe just make id var? (current solution)
         item.id = newId
 
-        println("Cache: writing item: ${item.id}")
         cache[item.id] = item
     }
 
     override fun deleteItem(id: Int) {
-        println("Cache: deleting item: $id")
         ensureIdExists(id)
         cache.remove(id)
     }
