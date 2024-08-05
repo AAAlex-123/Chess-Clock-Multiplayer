@@ -20,18 +20,34 @@ data class ClockSet private constructor( // use new() and load() instead of cons
         get() = clocks[currentClockIndex]
 
     fun nextIndex(skipFlagged: Boolean): ClockSet = this.let {
-        var index = it.currentClockIndex
+        val initialIndex = it.currentClockIndex
+
+        var index = initialIndex
         do {
             index = (index + 1) % it.clocks.size
+
+            // index circled all the way back to initialIndex,
+            // all clocks are flagged, there is no 'next' clock
+            if (index == initialIndex)
+                return it
+
         } while (skipFlagged && clocks[index].timeLeftMillis == 0L)
 
         it.copy(currentClockIndex = index)
     }
 
     fun prevIndex(skipFlagged: Boolean): ClockSet = this.let {
-        var index = it.currentClockIndex
+        val initialIndex = it.currentClockIndex
+
+        var index = initialIndex
         do {
             index = (index + it.clocks.size - 1) % it.clocks.size
+
+            // index circled all the way back to initialIndex,
+            // all clocks are flagged, there is no 'next' clock
+            if (index == initialIndex)
+                return it
+
         } while (skipFlagged && clocks[index].timeLeftMillis == 0L)
 
         it.copy(currentClockIndex = index)
