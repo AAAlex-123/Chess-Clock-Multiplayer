@@ -99,18 +99,8 @@ val Serializer.Companion.StringClockSetSerializer
                         val timeLeftMillis = m2.groupValues[3].toLong()
                         val lastSessionTimeMillis = m2.groupValues[4].toLong()
 
-                        val partialProfile = Profile.load(
-                            id = profileId,
-                            name = "",
-                            color = Color.Unspecified,
-                        )
-
-                        val partialTimeControl = TimeControl.load(
-                            id = timeControlId,
-                            timeSeconds = 0,
-                            incrementSeconds = 0,
-                            type = TimeControlType.FISHER,
-                        )
+                        val partialProfile = Profile.EMPTY.copy(id = profileId)
+                        val partialTimeControl = TimeControl.EMPTY.copy(id = timeControlId)
 
                         Clock.load(
                             partialProfile,
@@ -121,6 +111,6 @@ val Serializer.Companion.StringClockSetSerializer
                     }
                 }
 
-                ClockSet.load(id,name, clocks, currentClockIndex)
+                ClockSet.load(id, name, clocks, currentClockIndex)
             }
     }
