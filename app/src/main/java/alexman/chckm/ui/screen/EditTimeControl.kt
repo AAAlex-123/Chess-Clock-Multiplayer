@@ -55,9 +55,14 @@ fun EditTimeControlScreen(
     }
 
     timeControl.let {
+
+        val (initialTime, initialIncrement) =
+            if (it == TimeControl.EMPTY) ("" to "")
+            else parser.run { format(it.timeSeconds) to format(it.incrementSeconds) }
+
         EditTimeControlScreenContent(
-            initialTime = parser.format(it.timeSeconds),
-            initialIncrement = parser.format(it.incrementSeconds),
+            initialTime = initialTime,
+            initialIncrement = initialIncrement,
             initialType = it.type,
             onSubmit = ::onSubmit,
             validateTimeString = parser::validate,

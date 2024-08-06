@@ -248,7 +248,7 @@ private fun EditClockSetScreenContentMain(
             title = "Name",
             value = name,
             onValueChanged = onNameChanged,
-            placeholderText = "Scrabble",
+            placeholderText = "Your Game",
             isError = nameIsError,
         )
         LazyColumn(

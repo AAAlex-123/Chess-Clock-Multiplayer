@@ -92,7 +92,7 @@ private fun EditProfileScreenContent(
                 name = it
                 nameIsError = !validateName(it)
             },
-            placeholderText = "Alice",
+            placeholderText = "Your Name",
             isError = nameIsError,
         )
         ChckmDropdownMenu(
