@@ -117,6 +117,7 @@ fun <T : Displayable> ListScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         LazyColumn(
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             items(data.sorted()) {
