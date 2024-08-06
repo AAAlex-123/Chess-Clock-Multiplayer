@@ -24,12 +24,14 @@ interface StringSerializer<T>: Serializer<T, String>
 val Serializer.Companion.StringTimeControlSerializer
     get() = object : StringSerializer<TimeControl> {
 
+        private val SEP = "~"
+
         override fun serialize(item: TimeControl): String =
             with(item) {
-                "$id-$timeSeconds-$incrementSeconds-$type"
+                "$id$SEP$timeSeconds$SEP$incrementSeconds$SEP$type"
             }
 
-        private val regex = Regex("(\\d+)-(\\d+)-(\\d+)-(\\w+)")
+        private val regex = Regex(pattern = "(\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\w+)")
 
         override fun deserialize(serializedItem: String): TimeControl =
             regex.matchEntire(serializedItem)!!.let { m ->
@@ -46,13 +48,15 @@ val Serializer.Companion.StringTimeControlSerializer
 val Serializer.Companion.StringProfileSerializer
     get() = object : StringSerializer<Profile> {
 
+        private val SEP = "~"
+
         override fun serialize(item: Profile): String =
             with(item) {
                 val argb = Integer.toHexString(color.toArgb()).uppercase()
-                "$id-$name-#${argb}"
+                "$id$SEP$name$SEP#${argb}"
             }
 
-        private val regex = Regex("(\\d+)-(\\w+)-(#\\w+)")
+        private val regex = Regex(pattern = "(\\d+)$SEP(\\w+)$SEP(#\\w+)")
 
         override fun deserialize(serializedItem: String): Profile =
             regex.matchEntire(serializedItem)!!.let { m ->
@@ -68,20 +72,22 @@ val Serializer.Companion.StringProfileSerializer
 val Serializer.Companion.StringClockSetSerializer
     get() = object : StringSerializer<ClockSet> {
 
+        private val SEP = "~"
+
         override fun serialize(item: ClockSet): String {
 
             val clocksString = item.clocks.joinToString(separator=",") {
-                "(${it.profile.id}-${it.timeControl.id}-" +
-                        "${it.timeLeftMillis}-${it.lastSessionTimeMillis})"
+                "(${it.profile.id}$SEP${it.timeControl.id}$SEP" +
+                        "${it.timeLeftMillis}$SEP${it.lastSessionTimeMillis})"
             }
 
             return with(item) {
-                "$id-$name-$currentClockIndex-[$clocksString]"
+                "$id$SEP$name$SEP$currentClockIndex$SEP[$clocksString]"
             }
         }
 
-        private val regex = Regex("(\\d+)-(\\w+)-(\\d+)-\\[(.*)]")
-        private val clockRegex = Regex("\\((\\d+)-(\\d+)-(\\d+)-(\\d+)\\)")
+        private val regex = Regex(pattern = "(\\d+)$SEP(\\w+)$SEP(\\d+)$SEP\\[(.*)]")
+        private val clockRegex = Regex(pattern = "\\((\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\d+)\\)")
 
         override fun deserialize(serializedItem: String): ClockSet =
             regex.matchEntire(serializedItem)!!.let { m ->
