@@ -52,8 +52,9 @@ fun EditProfileScreen(
         )
     }
 
-    // regex allows: letters, numbers, dash, space
-    val nameRegex = Regex(pattern = "^[\\w\\- ]+$")
+    // regex allows: letters, numbers, underscore, dash, space
+    // cannot start with dash or space, must be at least 1 character
+    val nameRegex = Regex(pattern = "^\\w[\\w\\- ]*$")
 
     fun validateName(name: String): Boolean =
         nameRegex.matches(name)
