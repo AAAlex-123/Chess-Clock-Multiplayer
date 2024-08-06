@@ -3,6 +3,7 @@ package alexman.chckm.core.designsystem.component
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
@@ -38,6 +39,7 @@ fun ChckmCard(
         modifier = modifier,
     ) {
         Box(
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = contentAlignment,
             content = content,
         )
