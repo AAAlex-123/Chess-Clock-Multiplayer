@@ -331,6 +331,7 @@ private fun RowScope.SmallPlayerClock(
     ChckmCard(
         onClick = { },
         modifier = Modifier.weight(1f),
+        backgroundColor = clock.profile.color.copy(alpha = 0.5f),
     ) {
         Column(
             modifier = Modifier
@@ -362,7 +363,8 @@ private fun ColumnScope.BigPlayerClock(
         onClick = onClick,
         modifier = Modifier
             .aspectRatio(ratio = 1f)
-            .weight(1f)
+            .weight(1f),
+        backgroundColor = profile.color.copy(alpha = 0.5f),
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
