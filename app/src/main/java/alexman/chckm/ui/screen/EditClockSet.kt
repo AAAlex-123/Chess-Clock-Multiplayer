@@ -104,12 +104,7 @@ fun EditClockSetScreen(
         )
     }
 
-    // regex allows: letters, numbers, underscore, dash, space
-    // cannot start with dash or space, must be at least 1 character
-    val nameRegex = Regex(pattern = "^\\w[\\w\\- ]*$")
-
-    fun validateName(name: String): Boolean =
-        nameRegex.matches(name)
+    val validateName = ClockSet.Companion::validateName
 
     EditClockSetScreenContent(
         profileData = profileData,
@@ -124,7 +119,7 @@ fun EditClockSetScreen(
             )
         },
         onSubmit = ::onSubmit,
-        validateName = ::validateName,
+        validateName = validateName,
         onSubmitProfile = onSubmitProfile,
         onDeleteProfile = onDeleteProfile,
         onSubmitTimeControl = onSubmitTimeControl,

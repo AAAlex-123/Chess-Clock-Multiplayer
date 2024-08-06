@@ -31,7 +31,9 @@ val Serializer.Companion.StringTimeControlSerializer
                 "$id$SEP$timeSeconds$SEP$incrementSeconds$SEP$type"
             }
 
-        private val regex = Regex(pattern = "(\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\w+)")
+        private val regex = Regex(
+            pattern = "(\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\w+)"
+        )
 
         override fun deserialize(serializedItem: String): TimeControl =
             regex.matchEntire(serializedItem)!!.let { m ->
@@ -56,7 +58,9 @@ val Serializer.Companion.StringProfileSerializer
                 "$id$SEP$name$SEP#${argb}"
             }
 
-        private val regex = Regex(pattern = "(\\d+)$SEP(\\w+)$SEP(#\\w+)")
+        private val regex = Regex(
+            pattern = "(\\d+)$SEP(${Profile.NAME_REGEX.pattern})$SEP(#\\w+)"
+        )
 
         override fun deserialize(serializedItem: String): Profile =
             regex.matchEntire(serializedItem)!!.let { m ->
@@ -86,8 +90,12 @@ val Serializer.Companion.StringClockSetSerializer
             }
         }
 
-        private val regex = Regex(pattern = "(\\d+)$SEP(\\w+)$SEP(\\d+)$SEP\\[(.*)]")
-        private val clockRegex = Regex(pattern = "\\((\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\d+)\\)")
+        private val regex = Regex(
+            pattern = "(\\d+)$SEP(${ClockSet.NAME_REGEX.pattern})$SEP(\\d+)$SEP\\[(.*)]"
+        )
+        private val clockRegex = Regex(
+            pattern = "\\((\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\d+)\\)"
+        )
 
         override fun deserialize(serializedItem: String): ClockSet =
             regex.matchEntire(serializedItem)!!.let { m ->

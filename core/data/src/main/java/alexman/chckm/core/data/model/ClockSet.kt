@@ -82,5 +82,10 @@ data class ClockSet private constructor( // use new() and load() instead of cons
 
         fun load(id: Int, name: String, clocks: List<Clock>, currentClockIndex: Int) =
             ClockSet(id, name, clocks, currentClockIndex)
+
+        // regex allows: letters, numbers, underscore, dash, space
+        // cannot start with dash or space, must be at least 1 character
+        val NAME_REGEX = Regex(pattern = "\\w[\\w\\- ]*")
+        fun validateName(name: String) = NAME_REGEX.matches(name)
     }
 }
