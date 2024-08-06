@@ -154,7 +154,7 @@ private fun EditClockSetScreenContent(
     var editItemIndex by remember { mutableIntStateOf(-1) }
 
     var name by remember { mutableStateOf(initialName) }
-    var nameIsError by remember { mutableStateOf(false) }
+    var nameIsError by remember { mutableStateOf(!validateName(initialName)) }
 
     // start with at least two clocks
     val minClockCount = 2

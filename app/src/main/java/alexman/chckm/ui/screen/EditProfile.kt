@@ -79,7 +79,7 @@ private fun EditProfileScreenContent(
     var name by remember { mutableStateOf(initialName) }
     var color by remember { mutableStateOf(initialColor) }
 
-    var nameIsError by remember { mutableStateOf(false) }
+    var nameIsError by remember { mutableStateOf(!validateName(initialName)) }
 
     Column(
         modifier = Modifier.padding(64.dp),

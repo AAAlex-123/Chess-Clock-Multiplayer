@@ -82,8 +82,8 @@ private fun EditTimeControlScreenContent(
     var increment by remember { mutableStateOf(initialIncrement) }
     var type by remember { mutableStateOf(initialType) }
 
-    var timeIsError by remember { mutableStateOf(false) }
-    var incrementIsError by remember { mutableStateOf(false) }
+    var timeIsError by remember { mutableStateOf(!validateTimeString(initialTime)) }
+    var incrementIsError by remember { mutableStateOf(!validateTimeString(initialIncrement)) }
 
     Column(
         modifier = Modifier.padding(64.dp),
