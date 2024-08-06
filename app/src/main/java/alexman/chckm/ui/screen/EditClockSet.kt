@@ -12,7 +12,6 @@ import alexman.chckm.core.designsystem.component.ChckmTextM
 import alexman.chckm.core.designsystem.component.DeleteIcon
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -237,7 +236,7 @@ private fun EditClockSetScreenContentMain(
     onCreate: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(32.dp),
+        modifier = Modifier.padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(40.dp),
     ) {
         ChckmTextField(
@@ -302,9 +301,6 @@ private fun EditClockRow(
             // https://stackoverflow.com/questions/67677125/fill-height-for-child-in-row#67678041
             .height(IntrinsicSize.Min)
     ) {
-        ChckmTextM(
-            text = "${index + 1}:",
-        )
         ChckmCard(
             onClick = onEditProfile,
             modifier = Modifier
@@ -321,7 +317,7 @@ private fun EditClockRow(
         ChckmCard(
             onClick = onEditTimeControl,
             modifier = Modifier
-                .weight(2f)
+                .weight(1.5f)
                 .fillMaxHeight()
         ) {
             ChckmTextM(
@@ -335,18 +331,9 @@ private fun EditClockRow(
         if (index >= minClockCount)
             ChckmCard(
                 onClick = onDelete,
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier.aspectRatio(ratio = 1f),
             ) {
-                // icon card has smaller height than other cards with text,
-                // add a box to center icon in card
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(ratio = 1f),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    DeleteIcon(onClick = onDelete)
-                }
+                DeleteIcon(onClick = onDelete)
             }
     }
 }
