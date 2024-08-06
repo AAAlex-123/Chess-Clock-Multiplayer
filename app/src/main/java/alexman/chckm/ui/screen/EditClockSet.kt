@@ -194,7 +194,7 @@ private fun EditClockSetScreenContent(
             onRemoveClock = clockDataList::removeAt,
             onCreate = {
                 clockDataList.let {
-                    if (validateClockDataList(it))
+                    if (!nameIsError && validateClockDataList(it))
                         onSubmit(name, it)
                 }
             },
