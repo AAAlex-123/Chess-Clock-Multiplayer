@@ -63,9 +63,7 @@ fun ChckmTextField(
             onValueChange = onValueChanged,
             modifier = Modifier.fillMaxWidth(),
             textStyle = ChckmTypography.bodyMedium,
-            placeholder = { ChckmTextM(
-                text = placeholderText,
-            ) },
+            placeholder = { ChckmTextLM(text = placeholderText) },
             keyboardOptions = KeyboardOptions(autoCorrect = false),
             isError = isError,
             singleLine = true,

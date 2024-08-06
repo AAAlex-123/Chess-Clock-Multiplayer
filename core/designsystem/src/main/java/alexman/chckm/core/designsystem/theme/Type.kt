@@ -49,4 +49,8 @@ internal val ChckmTypography = Typography (
     bodyMedium = baseTextStyle.copy(
         fontSize = 24.sp,
     ),
+    // text field placeholder
+    labelMedium = baseTextStyle.copy(
+        fontSize = 20.sp,
+    )
 )
