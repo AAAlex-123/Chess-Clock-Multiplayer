@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Chess Clock - Multiplayer"
 include(":app")
+include(":core:designsystem")
+include(":core:data")
