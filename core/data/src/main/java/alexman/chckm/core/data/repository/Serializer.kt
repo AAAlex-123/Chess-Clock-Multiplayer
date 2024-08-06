@@ -1,8 +1,10 @@
 package alexman.chckm.core.data.repository
 
+import alexman.chckm.core.data.model.Clock
 import alexman.chckm.core.data.model.ClockSet
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
+import alexman.chckm.core.data.model.TimeControlType
 import android.graphics.Color.parseColor
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -41,7 +43,7 @@ val Serializer.Companion.StringTimeControlSerializer
                     m.groupValues[1].toInt(),
                     m.groupValues[2].toInt(),
                     m.groupValues[3].toInt(),
-                    alexman.chckm.core.data.model.TimeControlType.valueOf(m.groupValues[4]),
+                    TimeControlType.valueOf(m.groupValues[4]),
                 )
             }
     }
@@ -114,7 +116,7 @@ val Serializer.Companion.StringClockSetSerializer
                         val partialProfile = Profile.EMPTY.copy(id = profileId)
                         val partialTimeControl = TimeControl.EMPTY.copy(id = timeControlId)
 
-                        alexman.chckm.core.data.model.Clock.load(
+                        Clock.load(
                             partialProfile,
                             partialTimeControl,
                             timeLeftMillis,
