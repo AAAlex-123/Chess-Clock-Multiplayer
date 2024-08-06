@@ -15,6 +15,12 @@ data class ClockSet private constructor( // use new() and load() instead of cons
 
     override val displayString: String = name
 
+    override fun compareTo(other: Displayable): Int =
+        if (other is ClockSet)
+            compareBy<ClockSet> { it.displayString.lowercase() }.compare(this, other)
+        else
+            throw IllegalArgumentException("Cannot compare ClockSet to ${other::class.simpleName}")
+
     val currentClock: Clock
         get() = if (clocks.isEmpty()) throw NoSuchElementException()
                 else clocks[currentClockIndex]

@@ -1,5 +1,5 @@
 package alexman.chckm.core.data.model
 
-interface Displayable {
+interface Displayable : Comparable<Displayable> {
     val displayString: String
 }

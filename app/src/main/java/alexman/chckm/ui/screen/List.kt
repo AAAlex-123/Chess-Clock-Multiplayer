@@ -119,7 +119,7 @@ fun <T : Displayable> ListScreenContent(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            items(data) {
+            items(data.sorted()) {
                 ListItem(
                     dataItem = it,
                     onSelect = { onSelect(it) },

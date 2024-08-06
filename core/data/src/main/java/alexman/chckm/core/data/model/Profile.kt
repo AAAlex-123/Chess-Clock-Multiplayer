@@ -15,6 +15,12 @@ data class Profile private constructor( // use new() and load() instead of const
 
     override val displayString: String = name
 
+    override fun compareTo(other: Displayable): Int =
+        if (other is Profile)
+            compareBy<Profile> { it.displayString.lowercase() }.compare(this, other)
+        else
+            throw IllegalArgumentException("Cannot compare Profile to ${other::class.simpleName}")
+
     companion object {
         private const val ID_NOT_SET = -1
 

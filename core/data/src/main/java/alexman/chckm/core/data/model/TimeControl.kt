@@ -26,6 +26,13 @@ data class TimeControl private constructor( // use new() and load() instead of c
         else
             Parser.format(timeSeconds)
 
+    override fun compareTo(other: Displayable): Int =
+        if (other is TimeControl)
+            compareBy<TimeControl>({ it.timeSeconds }, { it.incrementSeconds })
+                .compare(this, other)
+        else
+            throw IllegalArgumentException("Cannot compare TimeControl to ${other::class.simpleName}")
+
     companion object {
         private const val ID_NOT_SET = -1
 
