@@ -237,10 +237,12 @@ private fun MainScreenContent(
             )
             when (clockState) {
                 ClockState.STOPPED -> ResumeIcon(
-                    onClick = onResume,
-                    enabled = !flagged
+                    onClick = { onResume() },
+                    enabled = !flagged,
                 )
-                ClockState.RUNNING -> PauseIcon(onClick = onPause)
+                ClockState.RUNNING -> PauseIcon(
+                    onClick = { onPause() },
+                )
             }
             NextIcon(
                 onClick = { onNext(false) },
@@ -253,15 +255,15 @@ private fun MainScreenContent(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             ResetIcon(
-                onClick = onReset,
+                onClick = { onReset() },
                 enabled = resetEnabled,
             )
             ChckmButton(
                 text = "Load",
-                onClick = onLoad,
+                onClick = { onLoad() },
             )
             FlagIcon(
-                onClick = onFlag,
+                onClick = { onFlag() },
                 enabled = !flagged,
             )
         }
@@ -370,7 +372,7 @@ private fun ColumnScope.BigPlayerClock(
             modifier = Modifier.fillMaxSize()
         ) {
             EditIcon(
-                onClick = onEditTime,
+                onClick = { onEditTime() },
                 modifier = Modifier.align(Alignment.TopEnd),
                 sizeVariation = SizeVariation.PRIMARY,
             )
