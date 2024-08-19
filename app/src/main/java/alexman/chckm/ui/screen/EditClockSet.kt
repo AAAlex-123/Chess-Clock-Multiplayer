@@ -68,14 +68,12 @@ private fun EditClockSetScreenPreview() {
 }
 
 private data class ClockData(
-    var profileId: Int = -1,
-    var profileDisplayString: String? = null,
-    var timeControlId: Int = -1,
-    var timeControlDisplayString: String? = null,
+    var profile: Profile = Profile.EMPTY,
+    var timeControl: TimeControl = TimeControl.EMPTY,
 ) {
     // computed property since it depends on other var properties
     val isInitialized: Boolean
-        get() = (profileId != -1) and (timeControlId != -1)
+        get() = (profile != Profile.EMPTY) and (timeControl != TimeControl.EMPTY)
 }
 
 @Composable
@@ -91,11 +89,8 @@ fun EditClockSetScreen(
 ) {
 
     fun onSubmit(name: String, clockDataList: List<ClockData>) {
-        val clocks = clockDataList.map { clockData ->
-            Clock.new(
-                profileData.first { it.id == clockData.profileId },
-                timeControlData.first { it.id == clockData.timeControlId },
-            )
+        val clocks = clockDataList.map {
+            Clock.new(it.profile, it.timeControl)
         }
 
         onSubmitClockSet(
@@ -111,10 +106,8 @@ fun EditClockSetScreen(
         initialName = clockSet.name,
         initialClockDataList = clockSet.clocks.map {
             ClockData(
-                it.profile.id,
-                it.profile.displayString,
-                it.timeControl.id,
-                it.timeControl.displayString
+                it.profile,
+                it.timeControl,
             )
         },
         onSubmit = ::onSubmit,
@@ -198,8 +191,7 @@ private fun EditClockSetScreenContent(
             listType = ListType.PROFILE,
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
-                    profileId = item.id
-                    profileDisplayString = item.displayString
+                    profile = item
                 }
                 screen = EditClockSetScreenEnum.MAIN
             },
@@ -211,8 +203,7 @@ private fun EditClockSetScreenContent(
             listType = ListType.TIME_CONTROL,
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
-                    timeControlId = item.id
-                    timeControlDisplayString = item.displayString
+                    timeControl = item
                 }
                 screen = EditClockSetScreenEnum.MAIN
             },
@@ -305,10 +296,12 @@ private fun EditClockRow(
             onClick = onEditProfile,
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            backgroundColor = clockData.profile.color.copy(alpha = 0.5f),
         ) {
             ChckmTextM(
-                text = clockData.profileDisplayString ?: emptyFieldText,
+                text = clockData.profile.displayString
+                    .takeIf { it.isNotEmpty() } ?: emptyFieldText,
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
@@ -318,10 +311,12 @@ private fun EditClockRow(
             onClick = onEditTimeControl,
             modifier = Modifier
                 .weight(1.5f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            backgroundColor = clockData.profile.color.copy(alpha = 0.5f),
         ) {
             ChckmTextM(
-                text = clockData.timeControlDisplayString ?: emptyFieldText,
+                text = clockData.timeControl.displayString
+                    .takeIf { it != "0 sec" } ?: emptyFieldText,
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()

@@ -8,6 +8,9 @@ data class Clock private constructor( // use new() and load() instead of constru
     val lastSessionTimeMillis: Long = timeLeftMillis,
 ) {
     companion object {
+
+        val EMPTY: Clock = Clock(Profile.EMPTY, TimeControl.EMPTY, 0, 0)
+
         fun new(profile: Profile, timeControl: TimeControl): Clock =
             Clock(
                 profile,
