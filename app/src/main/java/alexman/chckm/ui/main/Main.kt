@@ -286,17 +286,17 @@ private fun msToTimeString(ms: Long, longFormat: Boolean): String {
 private fun OtherPlayersRow(
     clockSet: ClockSet,
 ) {
+    val absoluteMaxClocksPerRow = 3
     val clockCount = clockSet.clocks.size
 
-    val absoluteMaxClocksPerRow = 3
+    var rows = 0
+    var clocksPerRow: Int
 
-    var rows = 1
-    var clocksPerRow = ceil(clockCount / rows.toDouble()).toInt()
-
-    while (clocksPerRow > absoluteMaxClocksPerRow) {
+    // add rows while clocksPerRow exceeds maximum
+    do {
         rows += 1
         clocksPerRow = ceil(clockCount / rows.toDouble()).toInt()
-    }
+    } while (clocksPerRow > absoluteMaxClocksPerRow)
 
     Column(
         modifier = Modifier
