@@ -148,6 +148,13 @@ fun MainScreen(
         screen = MainScreenEnum.EDIT_TIMECONTROL
     }
 
+    fun onResetGame() {
+        onPause()
+        clockSet = clockSet.resetAll()
+        chckmViewModel.writeClockSet(clockSet)
+        setTimerToCurrentClock()
+    }
+
     fun onLoad() {
         onPause()
         screen = MainScreenEnum.LOAD_CLOCKSET
@@ -167,6 +174,7 @@ fun MainScreen(
             onFlag = ::onFlag,
             onReset = ::onReset,
             onEdit = ::onEdit,
+            onResetGame = ::onResetGame,
             onLoad = ::onLoad,
         )
         MainScreenEnum.LOAD_CLOCKSET -> ListClockSetScreen(
@@ -207,6 +215,7 @@ private fun MainScreenContent(
     onFlag: () -> Unit,
     onReset: () -> Unit,
     onEdit: () -> Unit,
+    onResetGame: () -> Unit,
     onLoad: () -> Unit,
 ) {
     val flagged = currentTimeLeftMillis == 0L

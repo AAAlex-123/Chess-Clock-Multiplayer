@@ -71,6 +71,16 @@ data class ClockSet private constructor( // use new() and load() instead of cons
         it.copy(clocks = newClockList)
     }
 
+    fun resetAll(): ClockSet = this.let {
+        val newClockList = it.clocks.map { clock ->
+            // this effectively resets timeLeftMillis and
+            // lastSessionTimeMillis of each Clock
+            Clock.new(clock.profile, clock.timeControl)
+        }
+
+        it.copy(clocks = newClockList)
+    }
+
     companion object {
         private const val ID_NOT_SET = -1
 
