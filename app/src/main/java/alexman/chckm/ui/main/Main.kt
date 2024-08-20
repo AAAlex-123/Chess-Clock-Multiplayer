@@ -224,8 +224,8 @@ private fun MainScreenContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(64.dp),
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(48.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OtherPlayersRow(clockSet = clockSet)
@@ -233,7 +233,6 @@ private fun MainScreenContent(
             profile = clockSet.currentClock.profile,
             currentTimeLeftMillis = currentTimeLeftMillis,
             onClick = { onNext(true) },
-            onEditTime = onEdit,
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -267,14 +266,32 @@ private fun MainScreenContent(
                 onClick = { onReset() },
                 enabled = resetEnabled,
             )
-            ChckmButton(
-                text = "Load",
-                onClick = { onLoad() },
+            EditIcon(
+                onClick = { onEdit() },
+                sizeVariation = SizeVariation.PRIMARY,
             )
             FlagIcon(
                 onClick = { onFlag() },
                 enabled = !flagged,
             )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Box(modifier = Modifier.weight(1f)) {
+                ChckmButton(
+                    text = "Reset All",
+                    onClick = { onResetGame() },
+                    modifier = Modifier.align(Alignment.Center),
+                )
+            }
+            Box(modifier = Modifier.weight(1f)) {
+                ChckmButton(
+                    text = "Load",
+                    onClick = { onLoad() },
+                    modifier = Modifier.align(Alignment.Center),
+                )
+            }
         }
     }
 }
@@ -368,7 +385,6 @@ private fun ColumnScope.BigPlayerClock(
     profile: Profile,
     currentTimeLeftMillis: Long,
     onClick: () -> Unit,
-    onEditTime: () -> Unit,
 ) {
     ChckmCard(
         onClick = onClick,
@@ -380,11 +396,6 @@ private fun ColumnScope.BigPlayerClock(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            EditIcon(
-                onClick = { onEditTime() },
-                modifier = Modifier.align(Alignment.TopEnd),
-                sizeVariation = SizeVariation.PRIMARY,
-            )
             Column(
                 modifier = Modifier
                     .wrapContentHeight()
