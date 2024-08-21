@@ -188,12 +188,25 @@ fun MainScreen(
             timeControl = clockSet.currentClock.let {
                 it.timeControl.copy(timeSeconds = (it.timeLeftMillis / 1000).toInt())
             },
-            onSubmitTimeControl = {
-                val newClock = clockSet.currentClock.copy(
-                    timeControl = it,
-                    timeLeftMillis = it.timeSeconds * 1000L,
-                    lastSessionTimeMillis = it.timeSeconds * 1000L
-                )
+            onSubmitTimeControl = { tc ->
+                val newClock = clockSet.currentClock.let { clock ->
+
+                    // change only increment, timeSeconds is needed to reset game
+                    // note that this change in increment will be lost when the
+                    // game is stored and reloaded from persistent storage
+                    val newTimeControl = clock.timeControl.copy(
+                        incrementSeconds = tc.incrementSeconds,
+                    )
+
+                    // update the increment, and only change timeLeftMillis and
+                    // lastSessionTimeMillis. the actual time control will not
+                    // be updated, since we need the original one to reset game
+                    clock.copy(
+                        timeControl = newTimeControl,
+                        timeLeftMillis = tc.timeSeconds * 1000L,
+                        lastSessionTimeMillis = tc.timeSeconds * 1000L,
+                    )
+                }
                 clockSet = clockSet.updateCurrentClock(newClock)
                 chckmViewModel.writeClockSet(clockSet)
                 countDownViewModel.setNewTimeMillis(newClock.timeLeftMillis)
