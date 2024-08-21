@@ -9,17 +9,16 @@ data class ClockSet private constructor( // use new() and load() instead of cons
     val name: String,
     val clocks: List<Clock>,
     val currentClockIndex: Int,
-) : Identifiable, Displayable {
+) : Displayable(), Identifiable {
 
     override val id_not_set_constant: Int = ID_NOT_SET
 
     override val displayString: String = name
 
-    override fun compareTo(other: Displayable): Int =
-        if (other is ClockSet)
-            compareBy<ClockSet> { it.displayString.lowercase() }.compare(this, other)
-        else
-            throw IllegalArgumentException("Cannot compare ClockSet to ${other::class.simpleName}")
+    private val comparator = compareBy<ClockSet> { it.displayString.lowercase() }
+
+    override fun compareToImpl(other: Displayable): Int =
+        comparator.compare(this, other as ClockSet)
 
     val currentClock: Clock
         get() = if (clocks.isEmpty()) throw NoSuchElementException()
