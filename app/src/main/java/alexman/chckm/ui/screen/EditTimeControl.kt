@@ -4,7 +4,6 @@ import alexman.chckm.core.designsystem.component.ChckmButton
 import alexman.chckm.core.designsystem.component.ChckmTextField
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.TimeControl
-import alexman.chckm.core.data.model.TimeControlType
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,6 @@ private fun EditTimeControlScreenPreview() {
             timeControl = TimeControl.new(
                 timeSeconds = 180,
                 incrementSeconds = 1,
-                type = TimeControlType.FISHER,
             ),
             onSubmitTimeControl = { _ -> },
         )
@@ -41,7 +39,7 @@ fun EditTimeControlScreen(
 
     val parser = TimeControl.Companion.Parser
 
-    fun onSubmit(time: String, increment: String, type: TimeControlType) {
+    fun onSubmit(time: String, increment: String) {
         // these should never throw; validate should be called before submit
         val timeSeconds: Int = parser.parse(time)
         val incrementSeconds: Int = parser.parse(increment)
@@ -49,7 +47,6 @@ fun EditTimeControlScreen(
             timeControl.copy(
                 timeSeconds = timeSeconds,
                 incrementSeconds = incrementSeconds,
-                type = type,
             )
         )
     }
@@ -63,7 +60,6 @@ fun EditTimeControlScreen(
         EditTimeControlScreenContent(
             initialTime = initialTime,
             initialIncrement = initialIncrement,
-            initialType = it.type,
             onSubmit = ::onSubmit,
             validateTimeString = parser::validate,
         )
@@ -74,13 +70,11 @@ fun EditTimeControlScreen(
 private fun EditTimeControlScreenContent(
     initialTime: String,
     initialIncrement: String,
-    initialType: TimeControlType,
-    onSubmit: (String, String, TimeControlType) -> Unit,
+    onSubmit: (String, String) -> Unit,
     validateTimeString: (String) -> Boolean,
 ) {
     var time by remember { mutableStateOf(initialTime) }
     var increment by remember { mutableStateOf(initialIncrement) }
-    var type by remember { mutableStateOf(initialType) }
 
     var timeIsError by remember { mutableStateOf(!validateTimeString(initialTime)) }
     var incrementIsError by remember { mutableStateOf(!validateTimeString(initialIncrement)) }
@@ -114,7 +108,7 @@ private fun EditTimeControlScreenContent(
             text = "OK",
             onClick = {
                 if (!timeIsError && !incrementIsError) {
-                    onSubmit(time, increment, type)
+                    onSubmit(time, increment)
                 }
             },
             modifier = Modifier.align(Alignment.CenterHorizontally),

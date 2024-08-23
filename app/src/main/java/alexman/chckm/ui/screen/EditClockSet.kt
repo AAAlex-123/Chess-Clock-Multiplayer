@@ -4,7 +4,6 @@ import alexman.chckm.core.data.model.Clock
 import alexman.chckm.core.data.model.ClockSet
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
-import alexman.chckm.core.data.model.TimeControlType
 import alexman.chckm.core.designsystem.component.ChckmButton
 import alexman.chckm.core.designsystem.component.ChckmCard
 import alexman.chckm.core.designsystem.component.ChckmTextField
@@ -40,7 +39,7 @@ import androidx.compose.ui.unit.dp
 private fun EditClockSetScreenPreview() {
 
     val timeControl = TimeControl.new(
-        timeSeconds = 180, incrementSeconds = 1, type = TimeControlType.FISHER,
+        timeSeconds = 180, incrementSeconds = 1,
     )
     val profile = Profile.new(
         name = "Alice", color = Color.Red,

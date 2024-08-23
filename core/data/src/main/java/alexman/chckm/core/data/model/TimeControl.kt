@@ -3,19 +3,11 @@ package alexman.chckm.core.data.model
 import alexman.chckm.core.data.repository.Identifiable
 
 // TODO: document
-enum class TimeControlType {
-    FISHER,
-    BRONSTEIN,
-    DELAY,
-}
-
-// TODO: document
 data class TimeControl private constructor(
     // should be ID_NOT_SET when creating new TimeControl
     override var id: Int = ID_NOT_SET,
     val timeSeconds: Int,
     val incrementSeconds: Int,
-    val type: TimeControlType,
 ) : Displayable(), Identifiable {
 
     override val id_not_set_constant: Int = ID_NOT_SET
@@ -42,15 +34,14 @@ data class TimeControl private constructor(
             id = ID_NOT_SET,
             timeSeconds = 0,
             incrementSeconds = 0,
-            type = TimeControlType.FISHER,
         )
 
         // use this instead of constructor, it sets id automatically
-        fun new(timeSeconds: Int, incrementSeconds: Int, type: TimeControlType) =
-            TimeControl(ID_NOT_SET, timeSeconds, incrementSeconds, type)
+        fun new(timeSeconds: Int, incrementSeconds: Int) =
+            TimeControl(ID_NOT_SET, timeSeconds, incrementSeconds)
 
-        fun load(id: Int, timeSeconds: Int, incrementSeconds: Int, type: TimeControlType) =
-            TimeControl(id, timeSeconds, incrementSeconds, type)
+        fun load(id: Int, timeSeconds: Int, incrementSeconds: Int) =
+            TimeControl(id, timeSeconds, incrementSeconds)
 
         object Parser {
 

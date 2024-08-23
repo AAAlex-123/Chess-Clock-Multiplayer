@@ -4,7 +4,6 @@ import alexman.chckm.core.data.model.Clock
 import alexman.chckm.core.data.model.ClockSet
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
-import alexman.chckm.core.data.model.TimeControlType
 import android.graphics.Color.parseColor
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -30,7 +29,7 @@ val Serializer.Companion.StringTimeControlSerializer
 
         override fun serialize(item: TimeControl): String =
             with(item) {
-                "$id$SEP$timeSeconds$SEP$incrementSeconds$SEP$type"
+                "$id$SEP$timeSeconds$SEP$incrementSeconds"
             }
 
         private val regex = Regex(
@@ -43,7 +42,6 @@ val Serializer.Companion.StringTimeControlSerializer
                     m.groupValues[1].toInt(),
                     m.groupValues[2].toInt(),
                     m.groupValues[3].toInt(),
-                    TimeControlType.valueOf(m.groupValues[4]),
                 )
             }
     }
