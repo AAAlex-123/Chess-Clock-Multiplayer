@@ -10,7 +10,7 @@ enum class TimeControlType {
 }
 
 // TODO: document
-data class TimeControl private constructor( // use new() and load() instead of constructor
+data class TimeControl private constructor(
     // should be ID_NOT_SET when creating new TimeControl
     override var id: Int = ID_NOT_SET,
     val timeSeconds: Int,
@@ -26,6 +26,7 @@ data class TimeControl private constructor( // use new() and load() instead of c
         else
             Parser.format(timeSeconds)
 
+    // cache the comparator used in compareToImpl()
     private val comparator = compareBy<TimeControl>(
         { it.timeSeconds }, { it.incrementSeconds }
     )
@@ -34,9 +35,15 @@ data class TimeControl private constructor( // use new() and load() instead of c
         comparator.compare(this, other as TimeControl)
 
     companion object {
+        // required since member val cannot be used in companion object
         private const val ID_NOT_SET = -1
 
-        val EMPTY = TimeControl(ID_NOT_SET, 0, 0, TimeControlType.FISHER)
+        val EMPTY = TimeControl(
+            id = ID_NOT_SET,
+            timeSeconds = 0,
+            incrementSeconds = 0,
+            type = TimeControlType.FISHER,
+        )
 
         // use this instead of constructor, it sets id automatically
         fun new(timeSeconds: Int, incrementSeconds: Int, type: TimeControlType) =
@@ -54,13 +61,13 @@ data class TimeControl private constructor( // use new() and load() instead of c
                 pattern = "(\\d+)\\s*(?:s|sec|secs|second|seconds)"
             )
             private val regexMinSec = Regex( // 3 min, 1 sec
-                pattern = "${regexMin.pattern}[\\s,/|+\\-]*?${regexSec.pattern}"
+                pattern = "${regexMin.pattern}[\\s,/|+\\-]+?${regexSec.pattern}"
             )
 
             fun validate(time: String): Boolean =
                 time.trim().let {
-                    return@let regexMin.matches(it) || regexSec.matches(it)
-                            || regexMinSec.matches(it)
+                    return@let (regexMin.matches(it) || regexSec.matches(it)
+                            || regexMinSec.matches(it))
                 }
 
             fun parse(time: String): Int {
@@ -69,19 +76,24 @@ data class TimeControl private constructor( // use new() and load() instead of c
                         "\"$time\" does not correspond to a valid time string"
                     )
 
-                val trimmedTime = time.trim()
-                regexMin.matchEntire(trimmedTime)?.groupValues?.let { return it[1].toInt() * 60 }
-                regexSec.matchEntire(trimmedTime)?.groupValues?.let { return it[1].toInt() }
-                regexMinSec.matchEntire(trimmedTime)?.groupValues?.let {
-                    return it[1].toInt() * 60 + it[2].toInt()
+                time.trim().let { t ->
+                    regexMin.matchEntire(t)?.groupValues?.let { return it[1].toInt() * 60 }
+                    regexSec.matchEntire(t)?.groupValues?.let { return it[1].toInt() }
+                    regexMinSec.matchEntire(t)?.groupValues?.let {
+                        return it[1].toInt() * 60 + it[2].toInt()
+                    }
                 }
 
                 // one of the above ?.let calls is guaranteed to return
                 // because of `if` statement above, but kotlin doesn't know it
+                // "Just to satisfy the compiler?" was autocompleted by Gemini
                 throw Error("Why are we here? Just to satisfy the compiler?")
             }
 
             fun format(seconds: Int): String {
+                if (seconds < 0)
+                    throw IllegalArgumentException("`seconds` cannot be negative")
+
                 val min = "min"
                 val sec = "sec"
 
@@ -91,6 +103,7 @@ data class TimeControl private constructor( // use new() and load() instead of c
                 val m: String = if (seconds > 59) "${seconds / 60} $min" else ""
                 val s: String = if (seconds % 60 != 0) "${seconds % 60} $sec" else ""
 
+                // if only minutes or seconds, don't add extra space
                 return if (listOf(m, s).all { it != "" })
                     "$m $s" else "$m$s"
             }

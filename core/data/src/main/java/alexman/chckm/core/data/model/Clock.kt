@@ -1,7 +1,7 @@
 package alexman.chckm.core.data.model
 
 // TODO: document
-data class Clock private constructor( // use new() and load() instead of constructor
+data class Clock private constructor(
     val profile: Profile,
     val timeControl: TimeControl,
     val timeLeftMillis: Long = timeControl.timeSeconds * 1000L,
@@ -9,7 +9,12 @@ data class Clock private constructor( // use new() and load() instead of constru
 ) {
     companion object {
 
-        val EMPTY: Clock = Clock(Profile.EMPTY, TimeControl.EMPTY, 0, 0)
+        val EMPTY: Clock = Clock(
+            profile = Profile.EMPTY,
+            timeControl = TimeControl.EMPTY,
+            timeLeftMillis = 0,
+            lastSessionTimeMillis = 0,
+        )
 
         fun new(profile: Profile, timeControl: TimeControl): Clock =
             Clock(
