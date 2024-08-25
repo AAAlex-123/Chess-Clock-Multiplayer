@@ -9,6 +9,8 @@ import alexman.chckm.core.designsystem.component.EditIcon
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
+import alexman.chckm.core.designsystem.component.LocalSizes
+import alexman.chckm.core.designsystem.component.Sizes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -160,8 +163,10 @@ private fun <T : Displayable> ListItem(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                EditIcon(onClick = onEdit)
-                DeleteIcon(onClick = onDelete)
+                CompositionLocalProvider(value = LocalSizes provides Sizes.Secondary) {
+                    EditIcon(onClick = onEdit)
+                    DeleteIcon(onClick = onDelete)
+                }
             }
         }
     }

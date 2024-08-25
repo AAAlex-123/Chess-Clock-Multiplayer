@@ -11,10 +11,11 @@ import alexman.chckm.core.designsystem.component.NextIcon
 import alexman.chckm.core.designsystem.component.PauseIcon
 import alexman.chckm.core.designsystem.component.ResetIcon
 import alexman.chckm.core.designsystem.component.ResumeIcon
-import alexman.chckm.core.designsystem.component.SizeVariation
 import alexman.chckm.core.data.model.Clock
 import alexman.chckm.core.data.model.ClockSet
 import alexman.chckm.core.data.model.Profile
+import alexman.chckm.core.designsystem.component.LocalSizes
+import alexman.chckm.core.designsystem.component.Sizes
 import alexman.chckm.ui.screen.ChckmViewModel
 import alexman.chckm.ui.screen.EditTimeControlScreen
 import alexman.chckm.ui.screen.ListClockSetScreen
@@ -32,6 +33,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -252,41 +254,44 @@ private fun MainScreenContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            PreviousIcon(
-                onClick = { onPrev(false) },
-                enabled = clockState == ClockState.STOPPED,
-            )
-            when (clockState) {
-                ClockState.STOPPED -> ResumeIcon(
-                    onClick = { onResume() },
-                    enabled = !flagged,
+            CompositionLocalProvider(value = LocalSizes provides Sizes.Primary) {
+                PreviousIcon(
+                    onClick = { onPrev(false) },
+                    enabled = clockState == ClockState.STOPPED,
                 )
-                ClockState.RUNNING -> PauseIcon(
-                    onClick = { onPause() },
+                when (clockState) {
+                    ClockState.STOPPED -> ResumeIcon(
+                        onClick = { onResume() },
+                        enabled = !flagged,
+                    )
+                    ClockState.RUNNING -> PauseIcon(
+                        onClick = { onPause() },
+                    )
+                }
+                NextIcon(
+                    onClick = { onNext(false) },
+                    enabled = clockState == ClockState.STOPPED,
                 )
             }
-            NextIcon(
-                onClick = { onNext(false) },
-                enabled = clockState == ClockState.STOPPED,
-            )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ResetIcon(
-                onClick = { onReset() },
-                enabled = resetEnabled,
-            )
-            EditIcon(
-                onClick = { onEdit() },
-                sizeVariation = SizeVariation.PRIMARY,
-            )
-            FlagIcon(
-                onClick = { onFlag() },
-                enabled = !flagged,
-            )
+            CompositionLocalProvider(value = LocalSizes provides Sizes.Primary) {
+                ResetIcon(
+                    onClick = { onReset() },
+                    enabled = resetEnabled,
+                )
+                EditIcon(
+                    onClick = { onEdit() },
+                )
+                FlagIcon(
+                    onClick = { onFlag() },
+                    enabled = !flagged,
+                )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),

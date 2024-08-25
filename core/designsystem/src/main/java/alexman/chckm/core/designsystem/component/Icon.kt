@@ -36,15 +36,11 @@ private fun IconPreview() {
     }
 }
 
-enum class SizeVariation {
-    PRIMARY, SECONDARY,
-}
-
 @Composable
 fun DeleteIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -61,7 +57,7 @@ fun DeleteIcon(
 fun EditIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -78,7 +74,7 @@ fun EditIcon(
 fun ResetIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -95,7 +91,7 @@ fun ResetIcon(
 fun PreviousIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -112,7 +108,7 @@ fun PreviousIcon(
 fun NextIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -129,7 +125,7 @@ fun NextIcon(
 fun PauseIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -146,7 +142,7 @@ fun PauseIcon(
 fun ResumeIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -163,7 +159,7 @@ fun ResumeIcon(
 fun FlagIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.PRIMARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     IconClickable(
@@ -182,7 +178,7 @@ fun IconClickable(
     alt: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     Icon(
@@ -203,7 +199,7 @@ fun Icon(
     @DrawableRes id: Int,
     alt: String,
     modifier: Modifier = Modifier,
-    sizeVariation: SizeVariation = SizeVariation.SECONDARY,
+    sizeVariation: SizeVariation? = null,
     enabled: Boolean = true,
 ) {
     Image(
@@ -211,7 +207,8 @@ fun Icon(
         contentDescription = alt,
         modifier = modifier
             .height(
-                when (sizeVariation) {
+                // parameter sizeVariation overrides CompositionLocal
+                when (sizeVariation ?: LocalSizes.current.sizeVariation) {
                     SizeVariation.PRIMARY -> 64.dp
                     SizeVariation.SECONDARY -> 32.dp
                 }
