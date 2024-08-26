@@ -3,7 +3,7 @@ package alexman.chckm.core.designsystem.component
 import androidx.compose.runtime.staticCompositionLocalOf
 
 enum class SizeVariation {
-    PRIMARY, SECONDARY,
+    PRIMARY, SECONDARY, SCAFFOLD,
 }
 
 data class Sizes internal constructor(
@@ -13,6 +13,7 @@ data class Sizes internal constructor(
         // static vals which correspond to SizeVariation enum constants
         val Primary = Sizes(SizeVariation.PRIMARY)
         val Secondary = Sizes(SizeVariation.SECONDARY)
+        val Scaffold = Sizes(SizeVariation.SCAFFOLD)
     }
 }
 

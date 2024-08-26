@@ -211,6 +211,7 @@ fun Icon(
                 when (sizeVariation ?: LocalSizes.current.sizeVariation) {
                     SizeVariation.PRIMARY -> 64.dp
                     SizeVariation.SECONDARY -> 32.dp
+                    SizeVariation.SCAFFOLD -> 56.dp
                 }
             )
             .wrapContentWidth(),
