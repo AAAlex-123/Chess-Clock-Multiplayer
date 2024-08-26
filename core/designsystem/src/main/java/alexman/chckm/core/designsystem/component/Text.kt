@@ -19,6 +19,7 @@ private fun ChckmTextPreview() {
             verticalArrangement = Arrangement.spacedBy(40.dp),
         ) {
             ChckmTextDM(text = "Display Medium")
+            ChckmTextTM(text = "Title Medium")
             ChckmTextL(text = "Body Large")
             ChckmTextM(text = "Body Medium")
             ChckmTextLM(text = "Label Medium")
@@ -35,6 +36,20 @@ fun ChckmTextDM(
     Text(
         text = text,
         style = ChckmTypography.displayMedium,
+        modifier = modifier,
+        textAlign = textAlign,
+    )
+}
+
+@Composable
+fun ChckmTextTM(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
+) {
+    Text(
+        text = text,
+        style = ChckmTypography.titleMedium,
         modifier = modifier,
         textAlign = textAlign,
     )

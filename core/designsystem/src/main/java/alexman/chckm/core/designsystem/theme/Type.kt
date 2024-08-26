@@ -41,6 +41,10 @@ internal val ChckmTypography = Typography (
     displayMedium = baseTextStyle.copy(
         fontSize = 96.sp,
     ),
+    // scaffold title
+    titleMedium = baseTextStyle.copy(
+        fontSize = 40.sp,
+    ),
     // buttons
     bodyLarge = baseTextStyle.copy(
         fontSize = 32.sp,
