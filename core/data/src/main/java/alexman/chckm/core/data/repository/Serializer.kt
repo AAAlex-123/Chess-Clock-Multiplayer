@@ -33,7 +33,7 @@ val Serializer.Companion.StringTimeControlSerializer
             }
 
         private val regex = Regex(
-            pattern = "(\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\w+)"
+            pattern = "(\\d+)$SEP(\\d+)$SEP(\\d+)"
         )
 
         override fun deserialize(serializedItem: String): TimeControl =
