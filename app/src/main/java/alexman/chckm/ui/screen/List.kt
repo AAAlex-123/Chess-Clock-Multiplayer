@@ -1,5 +1,6 @@
 package alexman.chckm.ui.screen
 
+import alexman.chckm.core.data.model.ClockSet
 import alexman.chckm.core.data.model.Displayable
 import alexman.chckm.core.designsystem.component.ChckmButton
 import alexman.chckm.core.designsystem.component.ChckmCard
@@ -44,7 +45,7 @@ private fun ListScreenPreview() {
 }
 
 enum class ListType {
-    PROFILE, TIME_CONTROL,
+    PROFILE, TIME_CONTROL, CLOCK_SET,
 }
 
 private enum class ListScreenEnum {
@@ -67,6 +68,8 @@ fun <T : Displayable> ListScreen(
         screen = when (listType) {
             ListType.PROFILE -> ListScreenEnum.EDIT_PROFILE
             ListType.TIME_CONTROL -> ListScreenEnum.EDIT_TIME_CONTROL
+            // can't happen, ListScreenContent is used for ClockSet
+            ListType.CLOCK_SET -> ListScreenEnum.MAIN
         }
     }
 
@@ -74,6 +77,8 @@ fun <T : Displayable> ListScreen(
         val newItem = when (listType) {
             ListType.PROFILE -> Profile.EMPTY as T
             ListType.TIME_CONTROL -> TimeControl.EMPTY as T
+            // can't happen, ListScreenContent is used for ClockSet
+            ListType.CLOCK_SET -> ClockSet.EMPTY as T
         }
 
         onEdit(newItem)
@@ -82,6 +87,7 @@ fun <T : Displayable> ListScreen(
     when (screen) {
         ListScreenEnum.MAIN -> ListScreenContent(
             data = data,
+            listType = listType,
             onSelect = onSelect,
             onCreate = ::onCreate,
             onEdit = ::onEdit,
@@ -109,6 +115,7 @@ fun <T : Displayable> ListScreen(
 @Composable
 fun <T : Displayable> ListScreenContent(
     data: List<T>,
+    listType: ListType,
     onSelect: (T) -> Unit,
     onCreate: () -> Unit,
     onEdit: (T) -> Unit,

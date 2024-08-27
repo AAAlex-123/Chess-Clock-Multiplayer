@@ -67,6 +67,7 @@ fun ListClockSetScreen(
         // the default of ListScreen is not suitable for this, we have our own Edit Screen
         ListClockSetScreenEnum.MAIN -> ListScreenContent(
             data = clockSetData.value.data,
+            listType = ListType.CLOCK_SET,
             onSelect = onSelect,
             onCreate = ::onCreateClockSet,
             onEdit = ::onEditClockSet,
