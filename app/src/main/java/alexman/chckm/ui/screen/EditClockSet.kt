@@ -11,6 +11,7 @@ import alexman.chckm.core.designsystem.component.ChckmTextField
 import alexman.chckm.core.designsystem.component.ChckmTextM
 import alexman.chckm.core.designsystem.component.DeleteIcon
 import alexman.chckm.core.designsystem.theme.ChckmTheme
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -89,6 +90,7 @@ fun EditClockSetScreen(
     onSubmitTimeControl: (TimeControl) -> Unit,
     onDeleteTimeControl: (TimeControl) -> Unit,
 ) {
+    BackHandler { onNavigateBack() }
 
     fun onSubmit(name: String, clockDataList: List<ClockData>) {
         val clocks = clockDataList.map {

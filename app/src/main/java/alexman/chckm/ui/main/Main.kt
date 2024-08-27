@@ -19,6 +19,7 @@ import alexman.chckm.core.designsystem.component.Sizes
 import alexman.chckm.ui.screen.ChckmViewModel
 import alexman.chckm.ui.screen.EditTimeControlScreen
 import alexman.chckm.ui.screen.ListClockSetScreen
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -163,6 +164,9 @@ fun MainScreen(
     }
 
     val currentTimeLeftMillis = countDownState.value.timeLeftMillis
+
+    // going "back" from the game means loading another clock set
+    BackHandler { onLoad() }
 
     when (screen) {
         MainScreenEnum.MAIN -> MainScreenContent(

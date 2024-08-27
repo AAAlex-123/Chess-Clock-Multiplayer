@@ -7,6 +7,7 @@ import alexman.chckm.core.designsystem.component.DropdownType
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.designsystem.component.ChckmScaffold
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -42,6 +43,8 @@ fun EditProfileScreen(
     onSubmitProfile: (Profile) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
+    BackHandler { onNavigateBack() }
+
     // copied from Color companion object
     val colorList = listOf(Color.Black, Color.DarkGray, Color.Gray, Color.LightGray, Color.White,
         Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Cyan, Color.Magenta)

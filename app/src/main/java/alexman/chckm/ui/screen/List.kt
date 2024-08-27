@@ -13,6 +13,7 @@ import alexman.chckm.core.data.model.TimeControl
 import alexman.chckm.core.designsystem.component.ChckmScaffold
 import alexman.chckm.core.designsystem.component.LocalSizes
 import alexman.chckm.core.designsystem.component.Sizes
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,6 +64,8 @@ fun <T : Displayable> ListScreen(
     onSubmit: (T) -> Unit,
     onDelete: (T) -> Unit,
 ) {
+    BackHandler { onNavigateBack() }
+
     var screen by remember { mutableStateOf(ListScreenEnum.MAIN) }
     var editItem: T? by remember { mutableStateOf(null) }
 

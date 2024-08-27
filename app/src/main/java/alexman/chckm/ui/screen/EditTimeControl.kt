@@ -5,6 +5,7 @@ import alexman.chckm.core.designsystem.component.ChckmTextField
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.TimeControl
 import alexman.chckm.core.designsystem.component.ChckmScaffold
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,7 @@ fun EditTimeControlScreen(
     onSubmitTimeControl: (TimeControl) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
+    BackHandler { onNavigateBack() }
 
     val parser = TimeControl.Companion.Parser
 
