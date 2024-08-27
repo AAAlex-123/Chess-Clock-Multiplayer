@@ -58,6 +58,7 @@ private fun EditClockSetScreenPreview() {
             profileData = listOf(),
             timeControlData = listOf(),
             clockSet = clockSet,
+            onNavigateBack = { },
             onSubmitClockSet = { _ -> },
             onSubmitProfile = { _ -> },
             onDeleteProfile = { _ -> },
@@ -81,6 +82,7 @@ fun EditClockSetScreen(
     profileData: List<Profile>,
     timeControlData: List<TimeControl>,
     clockSet: ClockSet,
+    onNavigateBack: () -> Unit,
     onSubmitClockSet: (ClockSet) -> Unit,
     onSubmitProfile: (Profile) -> Unit,
     onDeleteProfile: (Profile) -> Unit,
@@ -110,6 +112,7 @@ fun EditClockSetScreen(
                 it.timeControl,
             )
         },
+        onNavigateBack = onNavigateBack,
         onSubmit = ::onSubmit,
         validateName = validateName,
         onSubmitProfile = onSubmitProfile,
@@ -129,6 +132,7 @@ private fun EditClockSetScreenContent(
     timeControlData: List<TimeControl>,
     initialName: String,
     initialClockDataList: List<ClockData>,
+    onNavigateBack: () -> Unit,
     onSubmit: (String, List<ClockData>) -> Unit,
     validateName: (String) -> Boolean,
     onSubmitProfile: (Profile) -> Unit,
@@ -171,6 +175,7 @@ private fun EditClockSetScreenContent(
             },
             name = name,
             nameIsError = nameIsError,
+            onNavigateBack = onNavigateBack,
             onNameChanged = {
                 name = it
                 nameIsError = !validateName(it)
@@ -189,6 +194,7 @@ private fun EditClockSetScreenContent(
         EditClockSetScreenEnum.SELECT_PROFILE -> ListScreen(
             data = profileData,
             listType = ListType.PROFILE,
+            onNavigateBack = { }, // TODO: this
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
                     profile = item
@@ -201,6 +207,7 @@ private fun EditClockSetScreenContent(
         EditClockSetScreenEnum.SELECT_TIME_CONTROL -> ListScreen(
             data = timeControlData,
             listType = ListType.TIME_CONTROL,
+            onNavigateBack = { }, // TODO: this
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
                     timeControl = item
@@ -219,6 +226,7 @@ private fun EditClockSetScreenContentMain(
     onEditTimeControl: (Int) -> Unit,
     name: String,
     nameIsError: Boolean,
+    onNavigateBack: () -> Unit,
     onNameChanged: (String) -> Unit,
     minClockCount: Int,
     clockDataList: List<ClockData>,
@@ -228,7 +236,7 @@ private fun EditClockSetScreenContentMain(
 ) {
     ChckmScaffold(
         titleText = "Edit Clock Set",
-        onNavigateBack = null,
+        onNavigateBack = onNavigateBack,
     ) {
         Column(
             modifier = Modifier.padding(24.dp),

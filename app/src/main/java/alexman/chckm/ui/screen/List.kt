@@ -38,6 +38,7 @@ private fun ListScreenPreview() {
         ListScreen(
             data = listOf(),
             listType = ListType.TIME_CONTROL,
+            onNavigateBack = { },
             onSelect = { _ -> },
             onSubmit = { _ -> },
             onDelete = { _ -> },
@@ -57,6 +58,7 @@ private enum class ListScreenEnum {
 fun <T : Displayable> ListScreen(
     data: List<T>,
     listType: ListType,
+    onNavigateBack: () -> Unit,
     onSelect: (T) -> Unit,
     onSubmit: (T) -> Unit,
     onDelete: (T) -> Unit,
@@ -89,6 +91,7 @@ fun <T : Displayable> ListScreen(
         ListScreenEnum.MAIN -> ListScreenContent(
             data = data,
             listType = listType,
+            onNavigateBack = onNavigateBack,
             onSelect = onSelect,
             onCreate = ::onCreate,
             onEdit = ::onEdit,
@@ -101,6 +104,7 @@ fun <T : Displayable> ListScreen(
                 onSubmit(updatedProfile as T)
                 screen = ListScreenEnum.MAIN
             },
+            onNavigateBack = { }, // TODO: this
         )
         ListScreenEnum.EDIT_TIME_CONTROL -> EditTimeControlScreen(
             timeControl = (editItem as TimeControl),
@@ -108,7 +112,8 @@ fun <T : Displayable> ListScreen(
                 // cast as T is not unchecked because of DataType
                 onSubmit(updatedTimeControl as T)
                 screen = ListScreenEnum.MAIN
-            }
+            },
+            onNavigateBack = { }, // TODO: this
         )
     }
 }
@@ -117,6 +122,7 @@ fun <T : Displayable> ListScreen(
 fun <T : Displayable> ListScreenContent(
     data: List<T>,
     listType: ListType,
+    onNavigateBack: (() -> Unit)?,
     onSelect: (T) -> Unit,
     onCreate: () -> Unit,
     onEdit: (T) -> Unit,
@@ -128,7 +134,7 @@ fun <T : Displayable> ListScreenContent(
             ListType.TIME_CONTROL -> "Pick a Time Control"
             ListType.CLOCK_SET -> "Pick a Clock Set"
         },
-        onNavigateBack = null,
+        onNavigateBack = onNavigateBack,
     ) {
         Column(
             modifier = Modifier.padding(64.dp),

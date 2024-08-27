@@ -31,6 +31,7 @@ private fun EditProfileScreenPreview() {
                 color = Color.Red,
             ),
             onSubmitProfile = { _ -> },
+            onNavigateBack = { },
         )
     }
 }
@@ -39,6 +40,7 @@ private fun EditProfileScreenPreview() {
 fun EditProfileScreen(
     profile: Profile,
     onSubmitProfile: (Profile) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     // copied from Color companion object
     val colorList = listOf(Color.Black, Color.DarkGray, Color.Gray, Color.LightGray, Color.White,
@@ -60,6 +62,7 @@ fun EditProfileScreen(
         initialColor = profile.color,
         colorList = colorList,
         onSubmit = ::onSubmit,
+        onNavigateBack = onNavigateBack,
         validateName = validateName,
     )
 }
@@ -70,6 +73,7 @@ private fun EditProfileScreenContent(
     initialColor: Color,
     colorList: List<Color>,
     onSubmit: (String, Color) -> Unit,
+    onNavigateBack: () -> Unit,
     validateName: (String) -> Boolean,
 ) {
     var name by remember { mutableStateOf(initialName) }
@@ -79,7 +83,7 @@ private fun EditProfileScreenContent(
 
     ChckmScaffold(
         titleText = "Edit Profile",
-        onNavigateBack = null,
+        onNavigateBack = onNavigateBack,
     ) {
         Column(
             modifier = Modifier.padding(64.dp),

@@ -214,6 +214,7 @@ fun MainScreen(
                 countDownViewModel.setNewTimeMillis(newClock.timeLeftMillis)
                 screen = MainScreenEnum.MAIN
             },
+            onNavigateBack = { }, // TODO: this
         )
     }
 }

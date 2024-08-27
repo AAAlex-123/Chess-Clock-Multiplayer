@@ -68,6 +68,7 @@ fun ListClockSetScreen(
         ListClockSetScreenEnum.MAIN -> ListScreenContent(
             data = clockSetData.value.data,
             listType = ListType.CLOCK_SET,
+            onNavigateBack = null,
             onSelect = onSelect,
             onCreate = ::onCreateClockSet,
             onEdit = ::onEditClockSet,
@@ -77,6 +78,7 @@ fun ListClockSetScreen(
             profileData = profileData.value.data,
             timeControlData = timeControlData.value.data,
             clockSet = (editItem as ClockSet),
+            onNavigateBack = { }, // TODO: this
             onSubmitClockSet = { updatedClockSet ->
                 onSubmitClockSet(updatedClockSet)
                 screen = ListClockSetScreenEnum.MAIN

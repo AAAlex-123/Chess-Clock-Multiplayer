@@ -28,6 +28,7 @@ private fun EditTimeControlScreenPreview() {
                 incrementSeconds = 1,
             ),
             onSubmitTimeControl = { _ -> },
+            onNavigateBack = { },
         )
     }
 }
@@ -36,6 +37,7 @@ private fun EditTimeControlScreenPreview() {
 fun EditTimeControlScreen(
     timeControl: TimeControl,
     onSubmitTimeControl: (TimeControl) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
 
     val parser = TimeControl.Companion.Parser
@@ -62,6 +64,7 @@ fun EditTimeControlScreen(
             initialTime = initialTime,
             initialIncrement = initialIncrement,
             onSubmit = ::onSubmit,
+            onNavigateBack = onNavigateBack,
             validateTimeString = parser::validate,
         )
     }
@@ -72,6 +75,7 @@ private fun EditTimeControlScreenContent(
     initialTime: String,
     initialIncrement: String,
     onSubmit: (String, String) -> Unit,
+    onNavigateBack: () -> Unit,
     validateTimeString: (String) -> Boolean,
 ) {
     var time by remember { mutableStateOf(initialTime) }
@@ -82,7 +86,7 @@ private fun EditTimeControlScreenContent(
 
     ChckmScaffold(
         titleText = "Edit Time Control",
-        onNavigateBack = null,
+        onNavigateBack = onNavigateBack,
     ) {
         Column(
             modifier = Modifier.padding(64.dp),
