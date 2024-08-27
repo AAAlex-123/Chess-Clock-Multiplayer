@@ -214,7 +214,11 @@ fun MainScreen(
                 countDownViewModel.setNewTimeMillis(newClock.timeLeftMillis)
                 screen = MainScreenEnum.MAIN
             },
-            onNavigateBack = { }, // TODO: this
+            onNavigateBack = {
+                // cancel TimeControl edit:
+                // don't submit updated time control, just return to MAIN
+                screen = MainScreenEnum.MAIN
+            },
         )
     }
 }

@@ -78,7 +78,11 @@ fun ListClockSetScreen(
             profileData = profileData.value.data,
             timeControlData = timeControlData.value.data,
             clockSet = (editItem as ClockSet),
-            onNavigateBack = { }, // TODO: this
+            onNavigateBack = {
+                // cancel ClockSet edit:
+                // don't submit updatedClockSet, just return to MAIN
+                screen = ListClockSetScreenEnum.MAIN
+            },
             onSubmitClockSet = { updatedClockSet ->
                 onSubmitClockSet(updatedClockSet)
                 screen = ListClockSetScreenEnum.MAIN

@@ -194,7 +194,11 @@ private fun EditClockSetScreenContent(
         EditClockSetScreenEnum.SELECT_PROFILE -> ListScreen(
             data = profileData,
             listType = ListType.PROFILE,
-            onNavigateBack = { }, // TODO: this
+            onNavigateBack = {
+                // cancel Profile selection:
+                // don't update editItem, just return to MAIN
+                screen = EditClockSetScreenEnum.MAIN
+            },
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
                     profile = item
@@ -207,7 +211,11 @@ private fun EditClockSetScreenContent(
         EditClockSetScreenEnum.SELECT_TIME_CONTROL -> ListScreen(
             data = timeControlData,
             listType = ListType.TIME_CONTROL,
-            onNavigateBack = { }, // TODO: this
+            onNavigateBack = {
+                // cancel TimeControl selection:
+                // don't update editItem, just return to MAIN
+                screen = EditClockSetScreenEnum.MAIN
+            },
             onSelect = { item ->
                 with (clockDataList[editItemIndex]) {
                     timeControl = item

@@ -104,7 +104,11 @@ fun <T : Displayable> ListScreen(
                 onSubmit(updatedProfile as T)
                 screen = ListScreenEnum.MAIN
             },
-            onNavigateBack = { }, // TODO: this
+            onNavigateBack = {
+                // cancel Profile edit:
+                // don't submit updatedProfile, just return to MAIN
+                screen = ListScreenEnum.MAIN
+            },
         )
         ListScreenEnum.EDIT_TIME_CONTROL -> EditTimeControlScreen(
             timeControl = (editItem as TimeControl),
@@ -113,7 +117,11 @@ fun <T : Displayable> ListScreen(
                 onSubmit(updatedTimeControl as T)
                 screen = ListScreenEnum.MAIN
             },
-            onNavigateBack = { }, // TODO: this
+            onNavigateBack = {
+                // cancel TimeControl edit:
+                // don't submit updatedTimeControl, just return to MAIN
+                screen = ListScreenEnum.MAIN
+            },
         )
     }
 }
