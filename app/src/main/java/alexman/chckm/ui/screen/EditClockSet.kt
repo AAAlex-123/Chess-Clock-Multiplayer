@@ -6,6 +6,7 @@ import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
 import alexman.chckm.core.designsystem.component.ChckmButton
 import alexman.chckm.core.designsystem.component.ChckmCard
+import alexman.chckm.core.designsystem.component.ChckmScaffold
 import alexman.chckm.core.designsystem.component.ChckmTextField
 import alexman.chckm.core.designsystem.component.ChckmTextM
 import alexman.chckm.core.designsystem.component.DeleteIcon
@@ -225,48 +226,53 @@ private fun EditClockSetScreenContentMain(
     onRemoveClock: (Int) -> Unit,
     onCreate: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp),
+    ChckmScaffold(
+        titleText = "Edit Clock Set",
+        onNavigateBack = null,
     ) {
-        ChckmTextField(
-            title = "Name",
-            value = name,
-            onValueChanged = onNameChanged,
-            placeholderText = "Your Game",
-            isError = nameIsError,
-        )
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
+        Column(
+            modifier = Modifier.padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(40.dp),
         ) {
-            itemsIndexed(clockDataList) { i, clockData ->
-                EditClockRow(
-                    onEditProfile = { onEditProfile(i) },
-                    onEditTimeControl = { onEditTimeControl(i) },
-                    index = i,
-                    minClockCount = minClockCount,
-                    clockData = clockData,
-                    onDelete = { onRemoveClock(i) }
+            ChckmTextField(
+                title = "Name",
+                value = name,
+                onValueChanged = onNameChanged,
+                placeholderText = "Your Game",
+                isError = nameIsError,
+            )
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+            ) {
+                itemsIndexed(clockDataList) { i, clockData ->
+                    EditClockRow(
+                        onEditProfile = { onEditProfile(i) },
+                        onEditTimeControl = { onEditTimeControl(i) },
+                        index = i,
+                        minClockCount = minClockCount,
+                        clockData = clockData,
+                        onDelete = { onRemoveClock(i) }
+                    )
+                }
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                ChckmButton(
+                    text = "+",
+                    onClick = onAddClock,
+                )
+                ChckmButton(
+                    text = "OK",
+                    onClick = onCreate,
                 )
             }
-        }
-        Row (
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            ChckmButton(
-                text = "+",
-                onClick = onAddClock,
-            )
-            ChckmButton(
-                text = "OK",
-                onClick = onCreate,
-            )
         }
     }
 }

@@ -10,6 +10,7 @@ import alexman.chckm.core.designsystem.component.EditIcon
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
+import alexman.chckm.core.designsystem.component.ChckmScaffold
 import alexman.chckm.core.designsystem.component.LocalSizes
 import alexman.chckm.core.designsystem.component.Sizes
 import androidx.compose.foundation.layout.Arrangement
@@ -121,28 +122,37 @@ fun <T : Displayable> ListScreenContent(
     onEdit: (T) -> Unit,
     onDelete: (T) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.padding(64.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    ChckmScaffold(
+        titleText = when(listType) {
+            ListType.PROFILE -> "Pick a Profile"
+            ListType.TIME_CONTROL -> "Pick a Time Control"
+            ListType.CLOCK_SET -> "Pick a Clock Set"
+        },
+        onNavigateBack = null,
     ) {
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+        Column(
+            modifier = Modifier.padding(64.dp),
+            verticalArrangement = Arrangement.spacedBy(40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            items(data.sorted()) {
-                ListItem(
-                    dataItem = it,
-                    onSelect = { onSelect(it) },
-                    onEdit = { onEdit(it) },
-                    onDelete = { onDelete(it) },
-                )
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                items(data.sorted()) {
+                    ListItem(
+                        dataItem = it,
+                        onSelect = { onSelect(it) },
+                        onEdit = { onEdit(it) },
+                        onDelete = { onDelete(it) },
+                    )
+                }
             }
+            ChckmButton(
+                text = "Create New",
+                onClick = onCreate,
+            )
         }
-        ChckmButton(
-            text = "Create New",
-            onClick = onCreate,
-        )
     }
 }
 

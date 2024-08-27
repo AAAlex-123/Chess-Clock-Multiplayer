@@ -4,6 +4,7 @@ import alexman.chckm.core.designsystem.component.ChckmButton
 import alexman.chckm.core.designsystem.component.ChckmTextField
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.TimeControl
+import alexman.chckm.core.designsystem.component.ChckmScaffold
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -79,39 +80,44 @@ private fun EditTimeControlScreenContent(
     var timeIsError by remember { mutableStateOf(!validateTimeString(initialTime)) }
     var incrementIsError by remember { mutableStateOf(!validateTimeString(initialIncrement)) }
 
-    Column(
-        modifier = Modifier.padding(64.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp),
-        horizontalAlignment = Alignment.Start,
+    ChckmScaffold(
+        titleText = "Edit Time Control",
+        onNavigateBack = null,
     ) {
-        ChckmTextField(
-            title = "Time",
-            value = time,
-            onValueChanged = {
-                time = it
-                timeIsError = !validateTimeString(it)
-            },
-            placeholderText = "15min 30s",
-            isError = timeIsError,
-        )
-        ChckmTextField(
-            title = "Increment",
-            value = increment,
-            onValueChanged = {
-                increment = it
-                incrementIsError = !validateTimeString(it)
-            },
-            placeholderText = "1m 15sec",
-            isError = incrementIsError,
-        )
-        ChckmButton(
-            text = "OK",
-            onClick = {
-                if (!timeIsError && !incrementIsError) {
-                    onSubmit(time, increment)
-                }
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        )
+        Column(
+            modifier = Modifier.padding(64.dp),
+            verticalArrangement = Arrangement.spacedBy(40.dp),
+            horizontalAlignment = Alignment.Start,
+        ) {
+            ChckmTextField(
+                title = "Time",
+                value = time,
+                onValueChanged = {
+                    time = it
+                    timeIsError = !validateTimeString(it)
+                },
+                placeholderText = "15min 30s",
+                isError = timeIsError,
+            )
+            ChckmTextField(
+                title = "Increment",
+                value = increment,
+                onValueChanged = {
+                    increment = it
+                    incrementIsError = !validateTimeString(it)
+                },
+                placeholderText = "1m 15sec",
+                isError = incrementIsError,
+            )
+            ChckmButton(
+                text = "OK",
+                onClick = {
+                    if (!timeIsError && !incrementIsError) {
+                        onSubmit(time, increment)
+                    }
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+        }
     }
 }

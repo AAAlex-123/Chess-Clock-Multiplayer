@@ -6,6 +6,7 @@ import alexman.chckm.core.designsystem.component.ChckmTextField
 import alexman.chckm.core.designsystem.component.DropdownType
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.Profile
+import alexman.chckm.core.designsystem.component.ChckmScaffold
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -76,36 +77,41 @@ private fun EditProfileScreenContent(
 
     var nameIsError by remember { mutableStateOf(!validateName(initialName)) }
 
-    Column(
-        modifier = Modifier.padding(64.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp),
-        horizontalAlignment = Alignment.Start,
+    ChckmScaffold(
+        titleText = "Edit Profile",
+        onNavigateBack = null,
     ) {
-        ChckmTextField(
-            title = "Name",
-            value = name,
-            onValueChanged = {
-                name = it
-                nameIsError = !validateName(it)
-            },
-            placeholderText = "Your Name",
-            isError = nameIsError,
-        )
-        ChckmDropdownMenu(
-            title = "Color",
-            options = colorList,
-            initialSelected = color,
-            type = DropdownType.COLOR,
-            onSelectedChanged = { color = it },
-        )
-        ChckmButton(
-            text = "OK",
-            onClick = {
-                if (!nameIsError) {
-                    onSubmit(name, color)
-                }
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        )
+        Column(
+            modifier = Modifier.padding(64.dp),
+            verticalArrangement = Arrangement.spacedBy(40.dp),
+            horizontalAlignment = Alignment.Start,
+        ) {
+            ChckmTextField(
+                title = "Name",
+                value = name,
+                onValueChanged = {
+                    name = it
+                    nameIsError = !validateName(it)
+                },
+                placeholderText = "Your Name",
+                isError = nameIsError,
+            )
+            ChckmDropdownMenu(
+                title = "Color",
+                options = colorList,
+                initialSelected = color,
+                type = DropdownType.COLOR,
+                onSelectedChanged = { color = it },
+            )
+            ChckmButton(
+                text = "OK",
+                onClick = {
+                    if (!nameIsError) {
+                        onSubmit(name, color)
+                    }
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+        }
     }
 }
