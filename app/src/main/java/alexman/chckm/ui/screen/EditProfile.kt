@@ -63,6 +63,7 @@ fun EditProfileScreen(
     EditProfileScreenContent(
         initialName = profile.name,
         initialColor = profile.color,
+        isCreate = profile == Profile.EMPTY,
         colorList = colorList,
         onSubmit = ::onSubmit,
         onNavigateBack = onNavigateBack,
@@ -74,6 +75,7 @@ fun EditProfileScreen(
 private fun EditProfileScreenContent(
     initialName: String,
     initialColor: Color,
+    isCreate: Boolean,
     colorList: List<Color>,
     onSubmit: (String, Color) -> Unit,
     onNavigateBack: () -> Unit,
@@ -85,7 +87,10 @@ private fun EditProfileScreenContent(
     var nameIsError by remember { mutableStateOf(!validateName(initialName)) }
 
     ChckmScaffold(
-        titleText = "Edit Profile",
+        titleText = when (isCreate) {
+            true -> "Create Profile"
+            false -> "Edit Profile"
+        },
         onNavigateBack = onNavigateBack,
     ) {
         Column(

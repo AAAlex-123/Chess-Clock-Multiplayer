@@ -115,6 +115,7 @@ fun EditClockSetScreen(
             )
         },
         onNavigateBack = onNavigateBack,
+        isCreate = clockSet == ClockSet.EMPTY,
         onSubmit = ::onSubmit,
         validateName = validateName,
         onSubmitProfile = onSubmitProfile,
@@ -135,6 +136,7 @@ private fun EditClockSetScreenContent(
     initialName: String,
     initialClockDataList: List<ClockData>,
     onNavigateBack: () -> Unit,
+    isCreate: Boolean,
     onSubmit: (String, List<ClockData>) -> Unit,
     validateName: (String) -> Boolean,
     onSubmitProfile: (Profile) -> Unit,
@@ -186,6 +188,7 @@ private fun EditClockSetScreenContent(
             clockDataList = clockDataList,
             onAddClock = { clockDataList.add(ClockData()) },
             onRemoveClock = clockDataList::removeAt,
+            isCreate = isCreate,
             onCreate = {
                 clockDataList.let {
                     if (!nameIsError && validateClockDataList(it))
@@ -242,10 +245,14 @@ private fun EditClockSetScreenContentMain(
     clockDataList: List<ClockData>,
     onAddClock: () -> Unit,
     onRemoveClock: (Int) -> Unit,
+    isCreate: Boolean,
     onCreate: () -> Unit,
 ) {
     ChckmScaffold(
-        titleText = "Edit Clock Set",
+        titleText = when (isCreate) {
+            true -> "Create Clock Set"
+            false -> "Edit Clock Set"
+        },
         onNavigateBack = onNavigateBack,
     ) {
         Column(

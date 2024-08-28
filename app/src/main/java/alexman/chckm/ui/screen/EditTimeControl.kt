@@ -65,6 +65,7 @@ fun EditTimeControlScreen(
         EditTimeControlScreenContent(
             initialTime = initialTime,
             initialIncrement = initialIncrement,
+            isCreate = it == TimeControl.EMPTY,
             onSubmit = ::onSubmit,
             onNavigateBack = onNavigateBack,
             validateTimeString = parser::validate,
@@ -76,6 +77,7 @@ fun EditTimeControlScreen(
 private fun EditTimeControlScreenContent(
     initialTime: String,
     initialIncrement: String,
+    isCreate: Boolean,
     onSubmit: (String, String) -> Unit,
     onNavigateBack: () -> Unit,
     validateTimeString: (String) -> Boolean,
@@ -87,7 +89,10 @@ private fun EditTimeControlScreenContent(
     var incrementIsError by remember { mutableStateOf(!validateTimeString(initialIncrement)) }
 
     ChckmScaffold(
-        titleText = "Edit Time Control",
+        titleText = when (isCreate) {
+            true -> "Create Time Control"
+            false -> "Edit Time Control"
+        },
         onNavigateBack = onNavigateBack,
     ) {
         Column(
