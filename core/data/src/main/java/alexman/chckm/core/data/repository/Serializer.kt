@@ -54,7 +54,16 @@ val Serializer.Companion.StringProfileSerializer
 
         override fun serialize(item: Profile): String =
             with(item) {
-                val argb = Integer.toHexString(color.toArgb()).uppercase()
+                val argb = Integer.toHexString(color.toArgb())
+                    // prettier
+                    .uppercase()
+                    // remove alpha, keep RRGGBB
+                    .substring(startIndex = 2)
+                    // cover some weird edge case where alpha is 00 (it shouldn't be),
+                    // and also RRGGBB has leading zeros; this would lead to an incomplete
+                    // RRGGBB string, which the `parseColor()` function cannot parse.
+                    .padStart(length = 6, padChar = '0')
+
                 "$id$SEP$name$SEP#${argb}"
             }
 
@@ -67,7 +76,7 @@ val Serializer.Companion.StringProfileSerializer
                 Profile.load(
                     m.groupValues[1].toInt(),
                     m.groupValues[2],
-                    Color(parseColor(m.groupValues[3])),
+                    Color(parseColor(m.groupValues[3])), // parses #RRGGBB
                 )
             }
     }
