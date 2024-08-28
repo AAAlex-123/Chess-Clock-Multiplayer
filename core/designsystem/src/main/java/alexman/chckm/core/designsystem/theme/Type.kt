@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
+// other styles copy this one and change some parameters
 private val baseTextStyle = TextStyle(
     color = Color.Unspecified,
     fontSize = TextUnit.Unspecified,
@@ -36,7 +37,14 @@ private val baseTextStyle = TextStyle(
     textIndent = TextIndent.None,
 )
 
-internal val ChckmTypography = Typography (
+/**
+ * Typography object for this project, defines all the different
+ * styles used in composable functions in this project.
+ *
+ * It is used in Theme.kt, as a parameter for
+ * [MaterialTheme][androidx.compose.material3.MaterialTheme].
+ */
+internal val ChckmTypography = Typography(
     // large player timer
     displayMedium = baseTextStyle.copy(
         fontSize = 96.sp,
@@ -56,5 +64,5 @@ internal val ChckmTypography = Typography (
     // text field placeholder
     labelMedium = baseTextStyle.copy(
         fontSize = 20.sp,
-    )
+    ),
 )
