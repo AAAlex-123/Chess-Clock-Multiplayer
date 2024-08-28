@@ -60,12 +60,12 @@ private fun EditClockSetScreenPreview() {
             profileData = listOf(),
             timeControlData = listOf(),
             clockSet = clockSet,
-            onNavigateBack = { },
             onSubmitClockSet = { _ -> },
             onSubmitProfile = { _ -> },
             onDeleteProfile = { _ -> },
             onSubmitTimeControl = { _ -> },
             onDeleteTimeControl = { _ -> },
+            onNavigateBack = { },
         )
     }
 }
@@ -84,12 +84,12 @@ fun EditClockSetScreen(
     profileData: List<Profile>,
     timeControlData: List<TimeControl>,
     clockSet: ClockSet,
-    onNavigateBack: () -> Unit,
     onSubmitClockSet: (ClockSet) -> Unit,
     onSubmitProfile: (Profile) -> Unit,
     onDeleteProfile: (Profile) -> Unit,
     onSubmitTimeControl: (TimeControl) -> Unit,
     onDeleteTimeControl: (TimeControl) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     BackHandler { onNavigateBack() }
 
@@ -103,7 +103,12 @@ fun EditClockSetScreen(
         )
     }
 
-    val validateName = ClockSet.Companion::validateName
+    fun validateName(name: String) = ClockSet.validateName(name)
+
+    fun validateClockDataList(clockDataList: List<ClockData>) =
+        with (clockDataList) {
+            (isNotEmpty()) and (all { it.isInitialized })
+        }
 
     EditClockSetScreenContent(
         profileData = profileData,
@@ -115,14 +120,15 @@ fun EditClockSetScreen(
                 it.timeControl,
             )
         },
-        onNavigateBack = onNavigateBack,
         isCreate = clockSet == ClockSet.EMPTY,
         onSubmit = ::onSubmit,
-        validateName = validateName,
         onSubmitProfile = onSubmitProfile,
         onDeleteProfile = onDeleteProfile,
         onSubmitTimeControl = onSubmitTimeControl,
         onDeleteTimeControl = onDeleteTimeControl,
+        onNavigateBack = onNavigateBack,
+        validateName = ::validateName,
+        validateClockDataList = ::validateClockDataList,
     )
 }
 
@@ -136,21 +142,19 @@ private fun EditClockSetScreenContent(
     timeControlData: List<TimeControl>,
     initialName: String,
     initialClockDataList: List<ClockData>,
-    onNavigateBack: () -> Unit,
     isCreate: Boolean,
     onSubmit: (String, List<ClockData>) -> Unit,
-    validateName: (String) -> Boolean,
     onSubmitProfile: (Profile) -> Unit,
     onDeleteProfile: (Profile) -> Unit,
     onSubmitTimeControl: (TimeControl) -> Unit,
     onDeleteTimeControl: (TimeControl) -> Unit,
+    onNavigateBack: () -> Unit,
+    validateName: (String) -> Boolean,
+    validateClockDataList: (List<ClockData>) -> Boolean,
 ) {
     var screen by remember { mutableStateOf(EditClockSetScreenEnum.MAIN) }
     // keeps track of the item between screens
     var editItemIndex by remember { mutableIntStateOf(-1) }
-
-    var name by remember { mutableStateOf(initialName) }
-    var nameIsError by remember { mutableStateOf(!validateName(initialName)) }
 
     // start with at least two clocks
     val minClockCount = 2
@@ -160,16 +164,24 @@ private fun EditClockSetScreenContent(
     // call toTypedArray() to use spread operator on resulting array
     val clockDataList = remember { mutableStateListOf(
         *initialClockDataList.toTypedArray(),
-        *initialEmptyClocks.toTypedArray()
+        *initialEmptyClocks.toTypedArray(),
     ) }
-
-    fun validateClockDataList(clockDataList: List<ClockData>) =
-        with (clockDataList) {
-            (isNotEmpty()) and (all { it.isInitialized })
-        }
 
     when (screen) {
         EditClockSetScreenEnum.MAIN -> EditClockSetScreenContentMain(
+            initialName = initialName,
+            minClockCount = minClockCount,
+            clockDataList = initialClockDataList,
+            isCreate = isCreate,
+            onCreate = { name ->
+                clockDataList.let {
+                    if (validateClockDataList(it))
+                        onSubmit(name, it)
+                }
+            },
+            onAddClock = { clockDataList.add(ClockData()) },
+            onRemoveClock = clockDataList::removeAt,
+            onNavigateBack = onNavigateBack,
             onEditProfile = { index ->
                 editItemIndex = index
                 screen = EditClockSetScreenEnum.SELECT_PROFILE
@@ -178,24 +190,8 @@ private fun EditClockSetScreenContent(
                 editItemIndex = index
                 screen = EditClockSetScreenEnum.SELECT_TIME_CONTROL
             },
-            name = name,
-            nameIsError = nameIsError,
-            onNavigateBack = onNavigateBack,
-            onNameChanged = {
-                name = it
-                nameIsError = !validateName(it)
-            },
-            minClockCount = minClockCount,
-            clockDataList = clockDataList,
-            onAddClock = { clockDataList.add(ClockData()) },
-            onRemoveClock = clockDataList::removeAt,
-            isCreate = isCreate,
-            onCreate = {
-                clockDataList.let {
-                    if (!nameIsError && validateClockDataList(it))
-                        onSubmit(name, it)
-                }
-            },
+            validateName = validateName,
+            validateClockDataList = validateClockDataList,
         )
         EditClockSetScreenEnum.SELECT_PROFILE -> ListScreen(
             data = profileData,
@@ -236,19 +232,25 @@ private fun EditClockSetScreenContent(
 
 @Composable
 private fun EditClockSetScreenContentMain(
-    onEditProfile: (Int) -> Unit,
-    onEditTimeControl: (Int) -> Unit,
-    name: String,
-    nameIsError: Boolean,
-    onNavigateBack: () -> Unit,
-    onNameChanged: (String) -> Unit,
+    initialName: String,
     minClockCount: Int,
     clockDataList: List<ClockData>,
+    isCreate: Boolean,
+    onCreate: (String) -> Unit,
     onAddClock: () -> Unit,
     onRemoveClock: (Int) -> Unit,
-    isCreate: Boolean,
-    onCreate: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onEditProfile: (Int) -> Unit,
+    onEditTimeControl: (Int) -> Unit,
+    validateName: (String) -> Boolean,
+    validateClockDataList: (List<ClockData>) -> Boolean,
 ) {
+
+    var name by remember { mutableStateOf(initialName) }
+    var nameIsError by remember { mutableStateOf(!validateName(initialName)) }
+
+    var clockDataListIsError by remember { mutableStateOf(!validateClockDataList(clockDataList)) }
+
     ChckmScaffold(
         titleText = when (isCreate) {
             true -> "Create Clock Set"
@@ -263,7 +265,10 @@ private fun EditClockSetScreenContentMain(
             ChckmTextField(
                 title = "Name",
                 value = name,
-                onValueChanged = onNameChanged,
+                onValueChanged = {
+                    name = it
+                    nameIsError = !validateName(it)
+                },
                 placeholderText = "Your Game",
                 isError = nameIsError,
             )
@@ -307,7 +312,10 @@ private fun EditClockSetScreenContentMain(
                             index = i,
                             minClockCount = minClockCount,
                             clockData = clockData,
-                            onDelete = { onRemoveClock(i) }
+                            onDelete = {
+                                onRemoveClock(i)
+                                clockDataListIsError = validateClockDataList(clockDataList)
+                            }
                         )
                     }
                 }
@@ -318,11 +326,18 @@ private fun EditClockSetScreenContentMain(
             ) {
                 ChckmButton(
                     text = "+",
-                    onClick = onAddClock,
+                    onClick = {
+                        onAddClock()
+                        clockDataListIsError = validateClockDataList(clockDataList)
+                    },
                 )
                 ChckmButton(
                     text = "OK",
-                    onClick = onCreate,
+                    onClick = {
+                        if (!nameIsError && !clockDataListIsError) {
+                            onCreate(name)
+                        }
+                    }
                 )
             }
         }

@@ -58,7 +58,7 @@ fun EditProfileScreen(
         )
     }
 
-    val validateName = Profile.Companion::validateName
+    fun validateName(name: String) = Profile.validateName(name)
 
     EditProfileScreenContent(
         initialName = profile.name,
@@ -67,7 +67,7 @@ fun EditProfileScreen(
         colorList = colorList,
         onSubmit = ::onSubmit,
         onNavigateBack = onNavigateBack,
-        validateName = validateName,
+        validateName = ::validateName,
     )
 }
 

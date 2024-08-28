@@ -39,10 +39,10 @@ private fun ListScreenPreview() {
         ListScreen(
             data = listOf(),
             listType = ListType.TIME_CONTROL,
-            onNavigateBack = { },
             onSelect = { _ -> },
             onSubmit = { _ -> },
             onDelete = { _ -> },
+            onNavigateBack = { },
         )
     }
 }
@@ -59,10 +59,10 @@ private enum class ListScreenEnum {
 fun <T : Displayable> ListScreen(
     data: List<T>,
     listType: ListType,
-    onNavigateBack: () -> Unit,
     onSelect: (T) -> Unit,
     onSubmit: (T) -> Unit,
     onDelete: (T) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     BackHandler { onNavigateBack() }
 
@@ -94,11 +94,11 @@ fun <T : Displayable> ListScreen(
         ListScreenEnum.MAIN -> ListScreenContent(
             data = data,
             listType = listType,
-            onNavigateBack = onNavigateBack,
             onSelect = onSelect,
             onCreate = ::onCreate,
             onEdit = ::onEdit,
             onDelete = onDelete,
+            onNavigateBack = onNavigateBack,
         )
         ListScreenEnum.EDIT_PROFILE -> EditProfileScreen(
             profile = (editItem as Profile),
@@ -133,11 +133,11 @@ fun <T : Displayable> ListScreen(
 fun <T : Displayable> ListScreenContent(
     data: List<T>,
     listType: ListType,
-    onNavigateBack: (() -> Unit)?,
     onSelect: (T) -> Unit,
     onCreate: () -> Unit,
     onEdit: (T) -> Unit,
     onDelete: (T) -> Unit,
+    onNavigateBack: (() -> Unit)?,
 ) {
     ChckmScaffold(
         titleText = when(listType) {

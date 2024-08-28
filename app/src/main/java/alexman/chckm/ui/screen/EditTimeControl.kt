@@ -56,21 +56,21 @@ fun EditTimeControlScreen(
         )
     }
 
-    timeControl.let {
+    fun validateTimeString(time: String) = parser.validate(time)
 
-        val (initialTime, initialIncrement) =
-            if (it == TimeControl.EMPTY) ("" to "")
-            else parser.run { format(it.timeSeconds) to format(it.incrementSeconds) }
-
-        EditTimeControlScreenContent(
-            initialTime = initialTime,
-            initialIncrement = initialIncrement,
-            isCreate = it == TimeControl.EMPTY,
-            onSubmit = ::onSubmit,
-            onNavigateBack = onNavigateBack,
-            validateTimeString = parser::validate,
-        )
+    val (initialTime, initialIncrement) = timeControl.let {
+        if (it == TimeControl.EMPTY) ("" to "")
+        else parser.run { format(it.timeSeconds) to format(it.incrementSeconds) }
     }
+
+    EditTimeControlScreenContent(
+        initialTime = initialTime,
+        initialIncrement = initialIncrement,
+        isCreate = timeControl == TimeControl.EMPTY,
+        onSubmit = ::onSubmit,
+        onNavigateBack = onNavigateBack,
+        validateTimeString = ::validateTimeString,
+    )
 }
 
 @Composable
