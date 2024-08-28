@@ -13,6 +13,7 @@ import alexman.chckm.core.designsystem.component.DeleteIcon
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -266,28 +267,54 @@ private fun EditClockSetScreenContentMain(
                 placeholderText = "Your Game",
                 isError = nameIsError,
             )
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                itemsIndexed(clockDataList) { i, clockData ->
-                    EditClockRow(
-                        onEditProfile = { onEditProfile(i) },
-                        onEditTimeControl = { onEditTimeControl(i) },
-                        index = i,
-                        minClockCount = minClockCount,
-                        clockData = clockData,
-                        onDelete = { onRemoveClock(i) }
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        // https://stackoverflow.com/questions/67677125/fill-height-for-child-in-row#67678041
+                        .height(IntrinsicSize.Min),
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        ChckmTextM(
+                            text = "Profiles:",
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                        )
+                    }
+                    Box(modifier = Modifier.weight(1.5f)) {
+                        ChckmTextM(
+                            text = "Time Controls:",
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                        )
+                    }
+                }
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxHeight(),
+                ) {
+                    itemsIndexed(clockDataList) { i, clockData ->
+                        EditClockRow(
+                            onEditProfile = { onEditProfile(i) },
+                            onEditTimeControl = { onEditTimeControl(i) },
+                            index = i,
+                            minClockCount = minClockCount,
+                            clockData = clockData,
+                            onDelete = { onRemoveClock(i) }
+                        )
+                    }
                 }
             }
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
             ) {
                 ChckmButton(
                     text = "+",
