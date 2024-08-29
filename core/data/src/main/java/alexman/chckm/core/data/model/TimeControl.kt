@@ -24,6 +24,8 @@ data class TimeControl private constructor(
 
     override val id_not_set_constant: Int = ID_NOT_SET
 
+    override fun copySetId(newId: Int): TimeControl = copy(id = newId)
+
     override val displayString: String =
         if (incrementSeconds != 0)
             "${Parser.format(timeSeconds)} | ${Parser.format(incrementSeconds)}"

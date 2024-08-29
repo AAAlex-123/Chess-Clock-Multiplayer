@@ -25,6 +25,8 @@ data class Profile private constructor(
 
     override val id_not_set_constant: Int = ID_NOT_SET
 
+    override fun copySetId(newId: Int): Profile = copy(id = newId)
+
     override val displayString: String = name
 
     // cache the comparator used in compareToImpl()

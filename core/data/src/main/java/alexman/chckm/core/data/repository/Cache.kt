@@ -20,17 +20,12 @@ class Cache<T : Identifiable> : Repository<T> {
         val newId = if (item.id == item.id_not_set_constant)
             nextAvailableId(item) else item.id
 
-        // lol
-        // this also changes original item's id
-        // since we don't make a copy
-        // since item is not a dataclass
+        // don't change the original item's id
+        val newItem = item.copySetId(newId)
 
-        // maybe Cloneable interface?
-        // maybe add setId method to Identifiable?
-        // maybe just make id var? (current solution)
-        item.id = newId
-
-        cache[item.id] = item
+        // safe cast, since copySetId() should return
+        // an Identifiable of the same class as item
+        cache[newItem.id] = newItem as T
     }
 
     override fun deleteItem(id: Int) {
