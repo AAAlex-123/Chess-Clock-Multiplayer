@@ -1,6 +1,6 @@
 package alexman.chckm.core.data.model
 
-import alexman.chckm.core.data.repository.Identifiable
+import alexman.chckm.core.data.Identifiable
 
 /**
  * Represents a TimeControl, a time and increment for a clock.

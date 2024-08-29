@@ -1,5 +1,6 @@
 package alexman.chckm.core.data.repository
 
+import alexman.chckm.core.data.Identifiable
 import alexman.chckm.core.data.repository.cache.Cache
 import alexman.chckm.core.data.repository.cache.InMemoryCache
 

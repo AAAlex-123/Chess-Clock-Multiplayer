@@ -1,5 +1,6 @@
 package alexman.chckm.core.data.repository
 
+import alexman.chckm.core.data.Identifiable
 import android.content.Context
 import java.io.FileNotFoundException
 

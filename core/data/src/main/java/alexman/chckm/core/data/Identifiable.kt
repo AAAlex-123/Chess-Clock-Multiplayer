@@ -1,4 +1,4 @@
-package alexman.chckm.core.data.repository
+package alexman.chckm.core.data
 
 // TODO: document
 interface Identifiable {

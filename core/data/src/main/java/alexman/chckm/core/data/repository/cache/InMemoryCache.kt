@@ -1,6 +1,6 @@
 package alexman.chckm.core.data.repository.cache
 
-import alexman.chckm.core.data.repository.Identifiable
+import alexman.chckm.core.data.Identifiable
 
 // TODO: document
 internal class InMemoryCache<T : Identifiable> : Cache<T> {
