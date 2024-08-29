@@ -1,24 +1,7 @@
 package alexman.chckm.core.data.repository
 
-// TODO: document
-interface Repository<T: Identifiable> {
-
-    fun readItem(id: Int): T
-
-    fun readAllItems(): List<T>
-
-    fun writeItem(item: T)
-
-    fun writeAllItems(items: Collection<T>) {
-        items.forEach(::writeItem)
-    }
-
-    fun deleteItem(id: Int)
-
-    fun deleteAllItems() {
-        readAllItems().map { it.id }.forEach(::deleteItem)
-    }
-}
+import alexman.chckm.core.data.repository.cache.Cache
+import alexman.chckm.core.data.repository.cache.InMemoryCache
 
 // TODO: document
 interface Persistent {
@@ -30,4 +13,4 @@ interface Persistent {
 
 // TODO: document
 abstract class PersistentRepository<T: Identifiable>
-    : Repository<T> by Cache(), Persistent
+    : Cache<T> by InMemoryCache(), Persistent
