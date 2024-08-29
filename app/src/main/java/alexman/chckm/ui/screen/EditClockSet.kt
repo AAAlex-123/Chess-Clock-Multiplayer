@@ -171,7 +171,7 @@ private fun EditClockSetScreenContent(
         EditClockSetScreenEnum.MAIN -> EditClockSetScreenContentMain(
             initialName = initialName,
             minClockCount = minClockCount,
-            clockDataList = initialClockDataList,
+            clockDataList = clockDataList,
             isCreate = isCreate,
             onCreate = { name ->
                 clockDataList.let {
