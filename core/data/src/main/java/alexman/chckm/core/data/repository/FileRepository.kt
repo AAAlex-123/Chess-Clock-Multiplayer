@@ -1,6 +1,7 @@
 package alexman.chckm.core.data.repository
 
 import alexman.chckm.core.data.Identifiable
+import alexman.chckm.core.data.serializer.StringSerializer
 import android.content.Context
 import java.io.FileNotFoundException
 

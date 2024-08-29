@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.repository.FileRepository
-import alexman.chckm.core.data.repository.Serializer
-import alexman.chckm.core.data.repository.StringClockSetSerializer
-import alexman.chckm.core.data.repository.StringProfileSerializer
-import alexman.chckm.core.data.repository.StringTimeControlSerializer
+import alexman.chckm.core.data.serializer.Serializer
+import alexman.chckm.core.data.serializer.StringClockSetSerializer
+import alexman.chckm.core.data.serializer.StringProfileSerializer
+import alexman.chckm.core.data.serializer.StringTimeControlSerializer
 import alexman.chckm.ui.screen.ChckmViewModel
 import alexman.chckm.ui.main.CountDownViewModel
 import alexman.chckm.ui.main.MainScreen

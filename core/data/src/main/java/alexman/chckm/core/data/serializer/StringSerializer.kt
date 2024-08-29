@@ -1,4 +1,4 @@
-package alexman.chckm.core.data.repository
+package alexman.chckm.core.data.serializer
 
 import alexman.chckm.core.data.model.Clock
 import alexman.chckm.core.data.model.ClockSet
@@ -7,16 +7,6 @@ import alexman.chckm.core.data.model.TimeControl
 import android.graphics.Color.parseColor
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-
-// TODO: document
-interface Serializer<T, U> {
-
-    fun serialize(item: T): U
-
-    fun deserialize(serializedItem: U): T
-
-    companion object
-}
 
 // TODO: document
 interface StringSerializer<T>: Serializer<T, String>
