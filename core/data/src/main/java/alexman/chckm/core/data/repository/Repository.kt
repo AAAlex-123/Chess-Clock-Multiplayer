@@ -12,21 +12,28 @@ class Repository<T: Identifiable>(
     private val cache: Cache<T>,
 ) : Cache<T> by cache {
 
+    private fun Cache<T>.replaceItems(items: List<T>) {
+        deleteAllItems()
+        writeAllItems(items)
+    }
+
     // TODO: document
     init {
-        val initialItems = dataSource.initialLoad()
-        cache.writeAllItems(initialItems)
+        dataSource.initialLoad().let {
+            cache.replaceItems(it)
+        }
     }
 
     fun load() {
-        val loadedItems = dataSource.load()
-
-        cache.deleteAllItems()
-        cache.writeAllItems(loadedItems)
+        dataSource.load().let {
+            cache.replaceItems(it)
+        }
     }
 
     fun store() {
-        dataSource.store(cache.readAllItems())
+        cache.readAllItems().let {
+            dataSource.store(it)
+        }
     }
 
     companion object {
