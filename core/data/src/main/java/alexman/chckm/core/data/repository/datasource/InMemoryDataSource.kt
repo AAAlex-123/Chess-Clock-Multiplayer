@@ -1,6 +1,13 @@
 package alexman.chckm.core.data.repository.datasource
 
-// TODO: document
+/**
+ * An implementation of the [DataSource] interface, which just stores data in
+ * memory.
+ *
+ * @param[T] the type of the items this in-memory data source will handle
+ *
+ * @author Alex Mandelias
+ */
 class InMemoryDataSource<T> : DataSource<T> {
 
     private lateinit var items: List<T>

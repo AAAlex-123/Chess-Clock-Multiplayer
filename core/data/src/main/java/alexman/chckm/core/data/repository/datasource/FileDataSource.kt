@@ -4,7 +4,15 @@ import alexman.chckm.core.data.serializer.StringSerializer
 import android.content.Context
 import java.io.FileNotFoundException
 
-// TODO: document
+/**
+ * An implementation of the [DataSource] interface, which uses a file as
+ * persistent storage for data.
+ *
+ * @param[T] the type of the items this file data source will handle
+ * @param[context] the [Context] object of the app
+ * @param[fileName] the name of the file to store the data to
+ * @param[serializer] the serializer to use to convert objects to strings
+ */
 class FileDataSource<T>(
     private val context: Context,
     private val fileName: String,
