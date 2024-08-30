@@ -1,4 +1,9 @@
 package alexman.chckm.core.data.repository.datasource
 
 // TODO: document
-class LoadException(message: String, cause: Throwable) : Exception(message, cause)
+internal class LoadException : Exception {
+
+    constructor(message: String): super(message)
+
+    constructor(message: String, cause: Throwable): super(message, cause)
+}
