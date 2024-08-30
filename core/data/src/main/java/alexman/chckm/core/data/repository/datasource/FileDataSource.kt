@@ -11,9 +11,9 @@ class FileDataSource<T>(
     private val serializer: StringSerializer<T>,
 ) : DataSource<T> {
 
-    companion object {
+    private companion object {
         // separator for each item in the file
-        private const val SEPARATOR = "\n"
+        const val SEPARATOR = "\n"
     }
 
     override fun recreate() {
