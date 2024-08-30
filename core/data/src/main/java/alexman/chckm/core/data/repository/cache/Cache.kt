@@ -3,7 +3,7 @@ package alexman.chckm.core.data.repository.cache
 import alexman.chckm.core.data.Identifiable
 
 // TODO: document
-internal interface Cache<T: Identifiable> {
+interface Cache<T: Identifiable> {
 
     fun readItem(id: Int): T
 

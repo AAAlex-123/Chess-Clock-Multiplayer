@@ -3,7 +3,7 @@ package alexman.chckm.core.data.repository.cache
 import alexman.chckm.core.data.Identifiable
 
 // TODO: document
-internal class InMemoryCache<T : Identifiable> : Cache<T> {
+class InMemoryCache<T : Identifiable> : Cache<T> {
 
     private val cache = mutableMapOf<Int, T>()
 
