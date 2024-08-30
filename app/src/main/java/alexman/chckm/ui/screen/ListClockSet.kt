@@ -4,7 +4,7 @@ import alexman.chckm.core.designsystem.theme.ChckmTheme
 import alexman.chckm.core.data.model.ClockSet
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
-import alexman.chckm.core.data.repository.FakePersistentRepository
+import alexman.chckm.core.data.repository.Repository
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,9 +19,9 @@ private fun ListClockSetDataScreenPreview() {
     ChckmTheme {
         ListClockSetScreen(
             viewModel = ChckmViewModel(
-                clockSetRepository = FakePersistentRepository(),
-                profileRepository = FakePersistentRepository(),
-                timeControlRepository = FakePersistentRepository(),
+                clockSetRepository = Repository.fake(),
+                profileRepository = Repository.fake(),
+                timeControlRepository = Repository.fake(),
             ),
             onSelect = { _ -> }
         )

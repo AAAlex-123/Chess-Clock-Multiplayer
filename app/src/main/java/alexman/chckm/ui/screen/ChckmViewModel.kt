@@ -3,7 +3,7 @@ package alexman.chckm.ui.screen
 import alexman.chckm.core.data.model.ClockSet
 import alexman.chckm.core.data.model.Profile
 import alexman.chckm.core.data.model.TimeControl
-import alexman.chckm.core.data.repository.PersistentRepository
+import alexman.chckm.core.data.repository.Repository
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,9 +14,9 @@ data class ListDataState<T>(
 )
 
 class ChckmViewModel(
-    private val profileRepository: PersistentRepository<Profile>,
-    private val timeControlRepository: PersistentRepository<TimeControl>,
-    private val clockSetRepository: PersistentRepository<ClockSet>,
+    private val profileRepository: Repository<Profile>,
+    private val timeControlRepository: Repository<TimeControl>,
+    private val clockSetRepository: Repository<ClockSet>,
 ): ViewModel() {
 
     private val _profileListDataUiState = MutableStateFlow(ListDataState<Profile>())

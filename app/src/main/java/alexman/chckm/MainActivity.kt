@@ -9,7 +9,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import alexman.chckm.core.designsystem.theme.ChckmTheme
-import alexman.chckm.core.data.repository.FileRepository
+import alexman.chckm.core.data.repository.Repository
+import alexman.chckm.core.data.repository.cache.InMemoryCache
+import alexman.chckm.core.data.repository.datasource.FileDataSource
 import alexman.chckm.core.data.serializer.Serializer
 import alexman.chckm.core.data.serializer.StringClockSetSerializer
 import alexman.chckm.core.data.serializer.StringProfileSerializer
@@ -41,18 +43,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun ChckmScreen() {
-    // initialize repositories
-    val timeControlRepository = FileRepository(
+    // initialize data sources
+    val timeControlDataSource = FileDataSource(
         LocalContext.current, TIME_CONTROL_FILE_NAME, Serializer.StringTimeControlSerializer
     )
-
-    val profileRepository = FileRepository(
+    val profileDataSource = FileDataSource(
         LocalContext.current, PROFILE_FILE_NAME, Serializer.StringProfileSerializer
     )
-
-    val clockSetRepository = FileRepository(
+    val clockSetDataSource = FileDataSource(
         LocalContext.current, CLOCK_SET_FILE_NAME, Serializer.StringClockSetSerializer
     )
+
+    // initialize repositories with data sources and a new InMemoryCache object for each
+    val timeControlRepository = Repository(timeControlDataSource, InMemoryCache())
+    val profileRepository = Repository(profileDataSource, InMemoryCache())
+    val clockSetRepository = Repository(clockSetDataSource, InMemoryCache())
 
     // update the partial clockSet objects with the full profile and timeControl data,
     // since the serialized version of clockSet only stores the id of profile and timeControl data
