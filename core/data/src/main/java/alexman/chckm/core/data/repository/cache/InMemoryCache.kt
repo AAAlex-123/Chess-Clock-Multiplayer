@@ -2,7 +2,14 @@ package alexman.chckm.core.data.repository.cache
 
 import alexman.chckm.core.data.Identifiable
 
-// TODO: document
+/**
+ * An implementation of the [Cache] interface, which stores data in memory.
+ *
+ * @param[T] the type of the items this in-memory cache will store; it must have
+ * an upper bound of [Identifiable].
+ *
+ * @author Alex Mandelias
+ */
 class InMemoryCache<T : Identifiable> : Cache<T> {
 
     private val cache = mutableMapOf<Int, T>()
