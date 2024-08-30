@@ -9,9 +9,9 @@ interface Cache<T: Identifiable> {
 
     fun readAllItems(): List<T>
 
-    fun writeItem(item: T)
+    fun writeItem(item: T): Int
 
-    fun writeAllItems(items: Collection<T>) = items.forEach(::writeItem)
+    fun writeAllItems(items: Collection<T>): List<Int> = items.map(::writeItem)
 
     fun deleteItem(id: Int)
 

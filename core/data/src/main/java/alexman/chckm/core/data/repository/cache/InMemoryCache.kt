@@ -14,7 +14,7 @@ class InMemoryCache<T : Identifiable> : Cache<T> {
 
     override fun readAllItems(): List<T> = cache.values.toList()
 
-    override fun writeItem(item: T) {
+    override fun writeItem(item: T): Int {
         // an item with id `id_not_set_constant` indicates creation of a new item,
         // otherwise indicates update of an existing one with that id.
         // when creating a new item, we need to assign an id to it
@@ -24,6 +24,8 @@ class InMemoryCache<T : Identifiable> : Cache<T> {
         // safe cast, since copySetId() should return
         // an Identifiable of the same class as item
         cache.writeIdentifiable(newItem as T)
+
+        return newItem.id
     }
 
     override fun deleteItem(id: Int) {
