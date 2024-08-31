@@ -19,11 +19,13 @@ val Serializer.Companion.StringTimeControlSerializer
 
         override fun serialize(item: TimeControl): String =
             with(item) {
-                "$id$SEP$timeSeconds$SEP$incrementSeconds"
+                listOf(id, timeSeconds, incrementSeconds)
+                    .joinToString(separator = SEP)
             }
 
         private val regex = Regex(
-            pattern = "(\\d+)$SEP(\\d+)$SEP(\\d+)"
+            pattern = listOf("\\d+", "\\d+", "\\d+") // regex parts
+                .joinToString(separator = SEP) { "($it)" } // make each a group
         )
 
         override fun deserialize(serializedItem: String): TimeControl =
@@ -54,11 +56,13 @@ val Serializer.Companion.StringProfileSerializer
                     // RRGGBB string, which the `parseColor()` function cannot parse.
                     .padStart(length = 6, padChar = '0')
 
-                "$id$SEP$name$SEP#${argb}"
+                listOf(id, name, "#$argb")
+                    .joinToString(separator = SEP)
             }
 
         private val regex = Regex(
-            pattern = "(\\d+)$SEP(${Profile.NAME_REGEX.pattern})$SEP(#\\w+)"
+            pattern = listOf("\\d+", Profile.NAME_REGEX.pattern, "#\\w+") // regex parts
+                .joinToString(separator = SEP) { "($it)" } // make each a group
         )
 
         override fun deserialize(serializedItem: String): Profile =
@@ -76,24 +80,41 @@ val Serializer.Companion.StringClockSetSerializer
     get() = object : StringSerializer<ClockSet> {
 
         private val SEP = "~"
+        private val CLOCK_LIST_SEP = ","
 
         override fun serialize(item: ClockSet): String {
 
-            val clocksString = item.clocks.joinToString(separator=",") {
-                "(${it.profile.id}$SEP${it.timeControl.id}$SEP" +
-                        "${it.timeLeftMillis}$SEP${it.lastSessionTimeMillis})"
+            val clockListString = item.clocks.joinToString(
+                separator = CLOCK_LIST_SEP
+            ) { clock ->
+                with(clock) {
+                    listOf(profile.id, timeControl.id, timeLeftMillis, lastSessionTimeMillis)
+                        .joinToString(
+                            separator = SEP,
+                            prefix = "(", postfix = ")", // surround clock string with '(', ')'
+                        )
+                }
             }
 
             return with(item) {
-                "$id$SEP$name$SEP$currentClockIndex$SEP[$clocksString]"
+                listOf(id, name, currentClockIndex, "[$clockListString]")
+                    .joinToString(separator = SEP)
             }
         }
 
         private val regex = Regex(
-            pattern = "(\\d+)$SEP(${ClockSet.NAME_REGEX.pattern})$SEP(\\d+)$SEP\\[(.*)]"
+            pattern = listOf(
+                "\\d+", ClockSet.NAME_REGEX.pattern, "\\d+", "\\[.*\\]" // regex parts
+            ).joinToString(separator = SEP) { "($it)" } // make each a group
         )
+
         private val clockRegex = Regex(
-            pattern = "\\((\\d+)$SEP(\\d+)$SEP(\\d+)$SEP(\\d+)\\)"
+            pattern = listOf("\\d+", "\\d+", "\\d+", "\\d+") // regex parts
+                .joinToString(
+                    separator = SEP,
+                    prefix = "\\(", postfix = "\\)", // clock string is surrounded by '(', ')'
+                    transform = { "($it)" }, // make each a group
+                )
         )
 
         override fun deserialize(serializedItem: String): ClockSet =
@@ -101,9 +122,11 @@ val Serializer.Companion.StringClockSetSerializer
                 val id = m.groupValues[1].toInt()
                 val name = m.groupValues[2]
                 val currentClockIndex = m.groupValues[3].toInt()
-                val clocksString = m.groupValues[4]
+                val clockListString = m.groupValues[4].let {
+                    it.substring(1, it.length - 1) // remove '[', ']' around string
+                }
 
-                val clocks = clocksString.split(",").map { clockString ->
+                val clocks = clockListString.split(",").map { clockString ->
                     clockRegex.matchEntire(clockString)!!.let { m2 ->
                         val profileId = m2.groupValues[1].toInt()
                         val timeControlId = m2.groupValues[2].toInt()
