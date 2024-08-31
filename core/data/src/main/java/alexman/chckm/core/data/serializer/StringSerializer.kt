@@ -8,10 +8,27 @@ import android.graphics.Color.parseColor
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 
-// TODO: document
-interface StringSerializer<T>: Serializer<T, String>
+/**
+ * Specification of the [Serializer] interface which converts to string.
+ *
+ * @param[T] the type from which to convert to string
+ *
+ * @author Alex Mandelias
+ */
+interface StringSerializer<T> : Serializer<T, String>
 
-// TODO: document
+/**
+ * Serializer which converts [TimeControl] objects to string and back.
+ *
+ * Example:
+ *
+ * ```
+ * // time control:
+ * TimeControl(id=1, timeSeconds=180, incrementSeconds=3)
+ * // serialized:
+ * "1~180~3"
+ * ````
+ */
 val Serializer.Companion.StringTimeControlSerializer
     get() = object : StringSerializer<TimeControl> {
 
@@ -38,7 +55,18 @@ val Serializer.Companion.StringTimeControlSerializer
             }
     }
 
-// TODO: document
+/**
+ * Serializer which converts [Profile] objects to string and back.
+ *
+ * Example:
+ *
+ * ```
+ * // profile:
+ * Profile(id=1, name="Alice", color=Color.Red)
+ * // serialized:
+ * 1~Alice~#FF0000
+ * ```
+ */
 val Serializer.Companion.StringProfileSerializer
     get() = object : StringSerializer<Profile> {
 
@@ -75,7 +103,28 @@ val Serializer.Companion.StringProfileSerializer
             }
     }
 
-// TODO: document
+/**
+ * Serializer which converts [ClockSet] objects to string and back.
+ *
+ * Example:
+ *
+ * ```
+ * // clock set data:
+ * val profile1 = Profile(id=2, name="Alice", color=Color.Red)
+ * val profile2 = Profile(id=3, name="Bob", color=Color.Green)
+ * val timeControl = TimeControl(id=4, timeSeconds=180, incrementSeconds=3)
+ *
+ * val clock1 = Clock(profile=profile1, timeControl=timeControl,
+ *                   timeLeftMillis=2000, lastSessionTimeMillis=2500)
+ * val clock2 = Clock(profile=profile2, timeControl=timeControl,
+ *                   timeLeftMillis=5000, lastSessionTimeMillis=6000)
+ *
+ * // clock set:
+ * ClockSet(id=1, name="Scrabble", clocks=[clock1, clock2], currentClockIndex=0)
+ * // serialized:
+ * 1~Scrabble~0~[(2~4~2000~2500),(3~4~5000~6000)]
+ * ```
+ */
 val Serializer.Companion.StringClockSetSerializer
     get() = object : StringSerializer<ClockSet> {
 
