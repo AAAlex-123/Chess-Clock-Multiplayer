@@ -26,6 +26,13 @@ data class TimeControl private constructor(
 
     override fun copySetId(newId: Int): TimeControl = copy(id = newId)
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is TimeControl)
+            return false
+
+        return timeSeconds == other.timeSeconds && incrementSeconds == other.incrementSeconds
+    }
+
     override val displayString: String =
         if (incrementSeconds != 0)
             "${Parser.format(timeSeconds)} | ${Parser.format(incrementSeconds)}"

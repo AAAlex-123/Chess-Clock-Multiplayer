@@ -38,4 +38,17 @@ interface Identifiable {
      * @return a copy of this object
      */
     fun copySetId(newId: Int): Identifiable
+
+    /**
+     * Overrides [Any.equals] to ignore the [id] field.
+     *
+     * Implementations shall use the rest of the fields of the class to check
+     * for equality, since it is often useful to check if two objects are equal
+     * irrespective of their ids. The ids may be checked directly.
+     *
+     * @param[other] the other object to check against
+     *
+     * @return `true` if the objects are equal, `false` otherwise.
+     */
+    override fun equals(other: Any?): Boolean
 }

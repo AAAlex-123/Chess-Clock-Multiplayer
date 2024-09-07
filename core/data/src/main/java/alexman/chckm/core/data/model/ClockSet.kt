@@ -31,6 +31,15 @@ data class ClockSet private constructor(
 
     override fun copySetId(newId: Int): ClockSet = copy(id = newId)
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is ClockSet)
+            return false
+
+        return name == other.name && currentClockIndex == other.currentClockIndex
+                // ensures both list contain the same items
+                && clocks.containsAll(other.clocks) && other.clocks.containsAll(clocks)
+    }
+
     override val displayString: String = name
 
     // cache the comparator used in compareToImpl()

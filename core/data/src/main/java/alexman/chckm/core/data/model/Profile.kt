@@ -27,6 +27,13 @@ data class Profile private constructor(
 
     override fun copySetId(newId: Int): Profile = copy(id = newId)
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is Profile)
+            return false
+
+        return name == other.name && color == other.color
+    }
+
     override val displayString: String = name
 
     // cache the comparator used in compareToImpl()
