@@ -187,9 +187,9 @@ private fun EditClockSetScreenContent(
     when (screen) {
         EditClockSetScreenEnum.MAIN -> EditClockSetScreenContentMain(
             initialName = initialName,
-            minClockCount = minClockCount,
             clockDataList = clockDataList,
             isCreate = isCreate,
+            canDeleteClockData = clockDataList.size > minClockCount,
             onCreate = onCreate@{ name ->
                 // shared time control, but no time control selected, don't submit
                 if (timeControlIsShared && sharedTimeControl == TimeControl.EMPTY)
@@ -283,9 +283,9 @@ private fun EditClockSetScreenContent(
 @Composable
 private fun EditClockSetScreenContentMain(
     initialName: String,
-    minClockCount: Int,
     clockDataList: List<ClockData>,
     isCreate: Boolean,
+    canDeleteClockData: Boolean,
     onCreate: (String) -> Unit,
     onAddClock: () -> Unit,
     onRemoveClock: (Int) -> Unit,
@@ -365,10 +365,9 @@ private fun EditClockSetScreenContentMain(
                         EditClockRow(
                             onEditProfile = { onEditProfile(i) },
                             onEditTimeControl = { onEditTimeControl(i) },
-                            index = i,
-                            minClockCount = minClockCount,
                             clockData = clockData,
                             timeControlIsShared = timeControlIsShared,
+                            canDeleteClockData = canDeleteClockData,
                             onDelete = {
                                 onRemoveClock(i)
                                 clockDataListIsError = validateClockDataList(clockDataList)
@@ -435,10 +434,9 @@ private fun EditClockSetScreenContentMain(
 private fun EditClockRow(
     onEditProfile: () -> Unit,
     onEditTimeControl: () -> Unit,
-    index: Int,
-    minClockCount: Int,
     clockData: ClockData,
     timeControlIsShared: Boolean,
+    canDeleteClockData: Boolean,
     onDelete: () -> Unit,
 ) {
 
@@ -485,8 +483,9 @@ private fun EditClockRow(
                 )
             }
         }
-        // don't allow deletion of first `minClocks` clocks
-        if (index >= minClockCount)
+        // don't allow deletion if there are less than `minCount` clocks
+        // see EditClockSetScreenContent for the logic behind canDeleteClockData
+        if (canDeleteClockData)
             ChckmCard(
                 onClick = onDelete,
                 modifier = Modifier.aspectRatio(ratio = 1f),
