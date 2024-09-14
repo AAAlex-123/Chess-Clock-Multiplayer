@@ -7,6 +7,7 @@ import alexman.chckm.core.data.model.TimeControl
 import alexman.chckm.core.designsystem.component.ChckmButton
 import alexman.chckm.core.designsystem.component.ChckmCard
 import alexman.chckm.core.designsystem.component.ChckmScaffold
+import alexman.chckm.core.designsystem.component.ChckmSwitch
 import alexman.chckm.core.designsystem.component.ChckmTextField
 import alexman.chckm.core.designsystem.component.ChckmTextM
 import alexman.chckm.core.designsystem.component.DeleteIcon
@@ -167,20 +168,53 @@ private fun EditClockSetScreenContent(
         *initialEmptyClocks.toTypedArray(),
     ) }
 
+    // if all time controls are the same, initialize isShared flag to true
+    val initialTimeControlIsShared = clockDataList.all {
+        it.timeControl == clockDataList[0].timeControl
+    }
+
+    var timeControlIsShared by remember { mutableStateOf(initialTimeControlIsShared) }
+
+    val initialSharedTimeControl =
+        if (initialTimeControlIsShared) clockDataList[0].timeControl
+        else TimeControl.EMPTY
+
+    // this property can be computed as follows wherever it is needed:
+    // if all time controls are the same, it is that common time control
+    // however, it is stored for better code readability
+    var sharedTimeControl by remember { mutableStateOf(initialSharedTimeControl) }
+
     when (screen) {
         EditClockSetScreenEnum.MAIN -> EditClockSetScreenContentMain(
             initialName = initialName,
             minClockCount = minClockCount,
             clockDataList = clockDataList,
             isCreate = isCreate,
-            onCreate = { name ->
+            onCreate = onCreate@{ name ->
+                // shared time control, but no time control selected, don't submit
+                if (timeControlIsShared && sharedTimeControl == TimeControl.EMPTY)
+                    return@onCreate
+
                 clockDataList.let {
                     if (validateClockDataList(it))
                         onSubmit(name, it)
                 }
             },
-            onAddClock = { clockDataList.add(ClockData()) },
+            onAddClock = {
+                clockDataList.add(
+                    if (!timeControlIsShared) ClockData()
+                    // if time control is shared, set new ClockData's time control to that one
+                    else ClockData(timeControl = sharedTimeControl)
+                )
+                // if time control is not shared, clear it, since we add empty ClockData
+                // it is necessary because it is not recomputed each time the switch is toggled
+                if (!timeControlIsShared)
+                    sharedTimeControl = TimeControl.EMPTY
+            },
             onRemoveClock = clockDataList::removeAt,
+            sharedTimeControl = sharedTimeControl,
+            timeControlIsShared = timeControlIsShared,
+            onTimeControlIsSharedChanged = { timeControlIsShared = it },
             onNavigateBack = onNavigateBack,
             onEditProfile = { index ->
                 editItemIndex = index
@@ -219,8 +253,24 @@ private fun EditClockSetScreenContent(
                 screen = EditClockSetScreenEnum.MAIN
             },
             onSelect = { item ->
-                with (clockDataList[editItemIndex]) {
-                    timeControl = item
+                if (!timeControlIsShared) {
+                    // if not shared time control, update just selected ClockData object
+                    with (clockDataList[editItemIndex]) {
+                        timeControl = item
+                    }
+
+                    // also update stored shared time control var
+                    sharedTimeControl = if (
+                        clockDataList.all { it.timeControl == clockDataList[0].timeControl }
+                    )
+                        clockDataList[0].timeControl // set to common, if exists
+                    else TimeControl.EMPTY // otherwise clear it
+                } else {
+                    // if shared time control, update all ClockData objects
+                    clockDataList.forEach { it.timeControl = item }
+
+                    // also update stored shared time control var
+                    sharedTimeControl = item
                 }
                 screen = EditClockSetScreenEnum.MAIN
             },
@@ -239,6 +289,9 @@ private fun EditClockSetScreenContentMain(
     onCreate: (String) -> Unit,
     onAddClock: () -> Unit,
     onRemoveClock: (Int) -> Unit,
+    sharedTimeControl: TimeControl,
+    timeControlIsShared: Boolean,
+    onTimeControlIsSharedChanged: (Boolean) -> Unit,
     onNavigateBack: () -> Unit,
     onEditProfile: (Int) -> Unit,
     onEditTimeControl: (Int) -> Unit,
@@ -292,13 +345,16 @@ private fun EditClockSetScreenContentMain(
                                 .fillMaxWidth(),
                         )
                     }
-                    Box(modifier = Modifier.weight(1.5f)) {
-                        ChckmTextM(
-                            text = "Time Controls:",
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                        )
+                    // hide time control label when time control is shared
+                    if (!timeControlIsShared) {
+                        Box(modifier = Modifier.weight(1.5f)) {
+                            ChckmTextM(
+                                text = "Time Controls:",
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .fillMaxWidth(),
+                            )
+                        }
                     }
                 }
                 LazyColumn(
@@ -312,6 +368,7 @@ private fun EditClockSetScreenContentMain(
                             index = i,
                             minClockCount = minClockCount,
                             clockData = clockData,
+                            timeControlIsShared = timeControlIsShared,
                             onDelete = {
                                 onRemoveClock(i)
                                 clockDataListIsError = validateClockDataList(clockDataList)
@@ -319,6 +376,36 @@ private fun EditClockSetScreenContentMain(
                         )
                     }
                 }
+            }
+            Column(
+                modifier = Modifier.height(IntrinsicSize.Min),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                // show shared time control data only when it is selected
+                if (timeControlIsShared) {
+                    ChckmTextM(text = "Time Control:")
+                    ChckmCard(
+                        onClick = { onEditTimeControl(-1) },
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp)
+                            .weight(1f),
+                    ) {
+                        ChckmTextM(
+                            text = sharedTimeControl.displayString
+                                .takeIf { it != "0 sec" } ?: "---",
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth()
+                        )
+                    }
+                }
+                ChckmSwitch(
+                    text = "Players share time control",
+                    checked = timeControlIsShared,
+                    onCheckedChanged = { onTimeControlIsSharedChanged(it) },
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -351,6 +438,7 @@ private fun EditClockRow(
     index: Int,
     minClockCount: Int,
     clockData: ClockData,
+    timeControlIsShared: Boolean,
     onDelete: () -> Unit,
 ) {
 
@@ -379,20 +467,23 @@ private fun EditClockRow(
                     .fillMaxWidth()
             )
         }
-        ChckmCard(
-            onClick = onEditTimeControl,
-            modifier = Modifier
-                .weight(1.5f)
-                .fillMaxHeight(),
-            backgroundColor = clockData.profile.color.copy(alpha = 0.5f),
-        ) {
-            ChckmTextM(
-                text = clockData.timeControl.displayString
-                    .takeIf { it != "0 sec" } ?: emptyFieldText,
+        // hide per-player time control when it is shared
+        if (!timeControlIsShared) {
+            ChckmCard(
+                onClick = onEditTimeControl,
                 modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            )
+                    .weight(1.5f)
+                    .fillMaxHeight(),
+                backgroundColor = clockData.profile.color.copy(alpha = 0.5f),
+            ) {
+                ChckmTextM(
+                    text = clockData.timeControl.displayString
+                        .takeIf { it != "0 sec" } ?: emptyFieldText,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                )
+            }
         }
         // don't allow deletion of first `minClocks` clocks
         if (index >= minClockCount)
