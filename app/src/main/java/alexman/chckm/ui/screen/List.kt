@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +69,7 @@ fun <T : Displayable> ListScreen(
 
     var screen by remember { mutableStateOf(ListScreenEnum.MAIN) }
     var editItem: T? by remember { mutableStateOf(null) }
+    var straightToCreate: Boolean by remember { mutableStateOf(false) }
 
     fun switchToEditScreen() {
         screen = when (listType) {
@@ -95,6 +97,15 @@ fun <T : Displayable> ListScreen(
         switchToEditScreen()
     }
 
+    LaunchedEffect(true) {
+        // there are no data items to list, go straight to create screen,
+        // as if the user pressed the "Create New" button
+        if (data.isEmpty()) {
+            straightToCreate = true
+            onCreate()
+        }
+    }
+
     when (screen) {
         ListScreenEnum.MAIN -> ListScreenContent(
             data = data,
@@ -110,12 +121,18 @@ fun <T : Displayable> ListScreen(
             onSubmitProfile = { updatedProfile ->
                 // cast as T is not unchecked because of DataType
                 onSubmit(updatedProfile as T)
-                screen = ListScreenEnum.MAIN
+                onSelect(updatedProfile as T)
             },
             onNavigateBack = {
-                // cancel Profile edit:
-                // don't submit updatedProfile, just return to MAIN
-                screen = ListScreenEnum.MAIN
+                if (!straightToCreate) {
+                    // cancel Profile edit:
+                    // don't submit updatedProfile, just return to MAIN
+                    screen = ListScreenEnum.MAIN
+                } else {
+                    // don't go to MAIN, since we went straight to create
+                    // from the previous screen, so return to it directly
+                    onNavigateBack()
+                }
             },
         )
         ListScreenEnum.EDIT_TIME_CONTROL -> EditTimeControlScreen(
@@ -123,12 +140,18 @@ fun <T : Displayable> ListScreen(
             onSubmitTimeControl = { updatedTimeControl ->
                 // cast as T is not unchecked because of DataType
                 onSubmit(updatedTimeControl as T)
-                screen = ListScreenEnum.MAIN
+                onSelect(updatedTimeControl as T)
             },
             onNavigateBack = {
-                // cancel TimeControl edit:
-                // don't submit updatedTimeControl, just return to MAIN
-                screen = ListScreenEnum.MAIN
+                if (!straightToCreate) {
+                    // cancel TimeControl edit:
+                    // don't submit updatedTimeControl, just return to MAIN
+                    screen = ListScreenEnum.MAIN
+                } else {
+                    // don't go to MAIN, since we went straight to create
+                    // from the previous screen, so return to it directly
+                    onNavigateBack()
+                }
             },
         )
     }
