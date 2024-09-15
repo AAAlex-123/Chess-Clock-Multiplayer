@@ -69,14 +69,18 @@ fun <T : Displayable> ListScreen(
     var screen by remember { mutableStateOf(ListScreenEnum.MAIN) }
     var editItem: T? by remember { mutableStateOf(null) }
 
-    fun onEdit(item: T) {
-        editItem = item
+    fun switchToEditScreen() {
         screen = when (listType) {
             ListType.PROFILE -> ListScreenEnum.EDIT_PROFILE
             ListType.TIME_CONTROL -> ListScreenEnum.EDIT_TIME_CONTROL
             // can't happen, ListScreenContent is used for ClockSet
             ListType.CLOCK_SET -> ListScreenEnum.MAIN
         }
+    }
+
+    fun onEdit(item: T) {
+        editItem = item
+        switchToEditScreen()
     }
 
     fun onCreate() {
@@ -87,7 +91,8 @@ fun <T : Displayable> ListScreen(
             ListType.CLOCK_SET -> ClockSet.EMPTY as T
         }
 
-        onEdit(newItem)
+        editItem = newItem
+        switchToEditScreen()
     }
 
     when (screen) {
