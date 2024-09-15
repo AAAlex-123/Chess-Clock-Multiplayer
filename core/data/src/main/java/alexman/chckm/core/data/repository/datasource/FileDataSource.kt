@@ -41,7 +41,7 @@ class FileDataSource<T>(
         }
 
         return fileContents.split(SEPARATOR)
-            // .filter(String::isNotEmpty)
+            .filter(String::isNotEmpty)
             .map(serializer::deserialize)
     }
 
